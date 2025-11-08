@@ -12,8 +12,10 @@ Digital home library is based on a microservice architecture.
 
 List of microservices:
 
+* Gateway service (based on Ocelot)
 * Authentification service
 * Tracking books service
+  * CRUD operations for books info
   * add score and review for book
   * managing tags of books by user
   * statuses for book: "Not read", "Reading" and "Read" (the difference with tags is status is subject to the bussines rules unlike tags)
