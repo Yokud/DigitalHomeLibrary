@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.Core.Entities
+﻿namespace DigitalHomeLibrary.TrackingBooks.Entities
 {
     public enum BookState
     {

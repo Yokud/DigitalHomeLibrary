@@ -1,10 +1,10 @@
-﻿namespace DigitalHomeLibrary.Core.Repositories
+﻿namespace DigitalHomeLibrary.TrackingBooks.Repositories
 {
     internal interface IRepository<T>
     {
         T Get(Guid id);
         IEnumerable<T> GetAll();
-        void Create(T entity);
+        Guid Create(T entity);
         void Update(T entity);
         void Delete(Guid id);
         void Save();

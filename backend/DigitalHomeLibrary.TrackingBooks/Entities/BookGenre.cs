@@ -1,6 +1,6 @@
-﻿namespace DigitalHomeLibrary.Core.Entities
+﻿namespace DigitalHomeLibrary.TrackingBooks.Entities
 {
-    public class BookLanguage
+    public class BookGenre
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
