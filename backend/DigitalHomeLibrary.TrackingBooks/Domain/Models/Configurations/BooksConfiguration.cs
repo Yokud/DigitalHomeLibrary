@@ -18,7 +18,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Domain.Models.Configurations
             builder
                 .HasOne(b => b.Language)
                 .WithMany(l => l.Books)
-                .HasForeignKey(l => l.LanguageId);
+                .HasForeignKey(b => b.LanguageId);
 
             builder
                 .HasMany(b => b.Authors)
