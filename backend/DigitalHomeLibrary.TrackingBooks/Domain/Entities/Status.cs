@@ -1,18 +1,19 @@
-﻿namespace DigitalHomeLibrary.TrackingBooks.Entities
+﻿namespace DigitalHomeLibrary.TrackingBooks.Domain.Entities
 {
-    public enum BookState
+    public enum ReadingState
     {
         NotRead,
         Reading,
         Readed
     }
 
-    public class BookStatus
+    public class Status
     {
         public Guid Id { get; set; }
         public Guid BookId { get; set; }
+        public Book? Book { get; set; }
         public DateTime AdditionDateTime { get; set; }
-        public BookState Status { get; set; }
+        public ReadingState ReadingState { get; set; }
         public DateOnly? ReadingStartDate { get; set; }
         public DateOnly? ReadingEndDate { get; set; }
     }

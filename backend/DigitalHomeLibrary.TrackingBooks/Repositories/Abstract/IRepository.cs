@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.TrackingBooks.Repositories
+﻿namespace DigitalHomeLibrary.TrackingBooks.Repositories.Abstract
 {
     internal interface IRepository<T>
     {
