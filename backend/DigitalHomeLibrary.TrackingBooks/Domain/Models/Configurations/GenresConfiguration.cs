@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalHomeLibrary.TrackingBooks.Domain.Models.Configurations
 {
-    public class GenresConfigurator : IEntityTypeConfiguration<Genre>
+    public class GenresConfiguration : IEntityTypeConfiguration<Genre>
     {
         public void Configure(EntityTypeBuilder<Genre> builder)
         {
