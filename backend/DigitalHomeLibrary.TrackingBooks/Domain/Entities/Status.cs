@@ -4,13 +4,12 @@
     {
         NotRead,
         Reading,
-        Readed
+        Read
     }
 
     public class Status
     {
         public Guid Id { get; set; }
-        public Guid BookId { get; set; }
         public Book? Book { get; set; }
         public DateTime AdditionDateTime { get; set; }
         public ReadingState ReadingState { get; set; }

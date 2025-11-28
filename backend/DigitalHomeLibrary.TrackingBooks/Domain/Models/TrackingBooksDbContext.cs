@@ -22,6 +22,12 @@ namespace DigitalHomeLibrary.TrackingBooks.Domain.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new BooksConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthorsConfiguration());
+            modelBuilder.ApplyConfiguration(new CountriesConfiguration());
+            modelBuilder.ApplyConfiguration(new LanguagesConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewsConfiguration());
+            modelBuilder.ApplyConfiguration(new TagsConfiguration());
+            modelBuilder.ApplyConfiguration(new StatusesConfiguration());
         }
     }
 }
