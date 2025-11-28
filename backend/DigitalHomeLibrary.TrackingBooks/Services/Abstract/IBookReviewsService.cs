@@ -1,7 +1,6 @@
 ﻿namespace DigitalHomeLibrary.TrackingBooks.Services.Abstract
 {
-    public interface ITrackingBooksService
+    public interface IBookReviewsService
     {
-
     }
 }
