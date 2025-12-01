@@ -27,7 +27,14 @@ namespace DigitalHomeLibrary.TrackingBooks.Domain.Models.Configurations
             builder
                 .HasOne(b => b.Status)
                 .WithOne(s => s.Book)
-                .HasForeignKey<Book>(b => b.StatusId);
+                .HasForeignKey<Book>(b => b.StatusId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .HasMany(b => b.Reviews)
+                .WithOne(r => r.ReviewedBook)
+                .HasForeignKey(r => r.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

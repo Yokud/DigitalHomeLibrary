@@ -9,11 +9,6 @@ namespace DigitalHomeLibrary.TrackingBooks.Domain.Models.Configurations
         public void Configure(EntityTypeBuilder<Review> builder)
         {
             builder.HasKey(r => r.Id);
-
-            builder
-                .HasOne(r => r.ReviewedBook)
-                .WithMany(b => b.Reviews)
-                .HasForeignKey(r => r.BookId);
         }
     }
 }

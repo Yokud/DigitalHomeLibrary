@@ -1,0 +1,6 @@
+services:
+  digitalhomelibrary.trackingbooks:
+    image: ${DOCKER_REGISTRY-}digitalhomelibrarytrackingbooks
+    build:
+      context: .
+      dockerfile: DigitalHomeLibrary.TrackingBooks/Dockerfile

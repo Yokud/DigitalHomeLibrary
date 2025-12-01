@@ -10,6 +10,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Domain.Models
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Country> Countries { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Status> BookStatuses { get; set; }
         public DbSet<Tag> Tags { get; set; }
