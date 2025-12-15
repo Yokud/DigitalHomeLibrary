@@ -3,12 +3,11 @@ using DigitalHomeLibrary.TrackingBooks.Domain.Models;
 using DigitalHomeLibrary.TrackingBooks.Infractructure;
 using DigitalHomeLibrary.TrackingBooks.Repositories.Abstract;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace DigitalHomeLibrary.TrackingBooks.Repositories
 {
-    public class AuthorsRepository(TrackingBooksDbContext context) : IAuthorsRepository
+    public class AuthorsRepository(TrackingBooksDbContext context) : IAsyncRepository<Author>
     {
         readonly TrackingBooksDbContext _context = context;
 
@@ -33,12 +32,12 @@ namespace DigitalHomeLibrary.TrackingBooks.Repositories
             if (paginationInfo is not null)
                 res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);
 
-            return await res.Include(e => e.Country).Include(e => e.Books).AsNoTracking().ToListAsync();
+            return await res.Include(e => e.Books).AsNoTracking().ToListAsync();
         }
 
         public async Task<Author?> GetAsync(Guid id)
         {
-            return await _context.Authors.Where(e => e.Id == id).Include(e => e.Country).Include(e => e.Books).AsNoTracking().SingleOrDefaultAsync();
+            return await _context.Authors.Where(e => e.Id == id).Include(e => e.Books).AsNoTracking().SingleOrDefaultAsync();
         }
 
         public async Task SaveAsync()
@@ -55,7 +54,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Repositories
                     SetProperty(e => e.LastName, entity.LastName).
                     SetProperty(e => e.BirthDate, entity.BirthDate).
                     SetProperty(e => e.DeathDate, entity.DeathDate).
-                    SetProperty(e => e.CountryId, entity.CountryId).
+                    SetProperty(e => e.CountryName, entity.CountryName).
                     SetProperty(e => e.LifeStory, entity.LifeStory)
                 );
         }

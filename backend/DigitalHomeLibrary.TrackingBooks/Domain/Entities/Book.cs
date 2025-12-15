@@ -9,10 +9,8 @@
         public int ReleaseYear { get; set; }
         public string Publisher { get; set; } = string.Empty;
         public string ISBN { get; set; } = string.Empty;
-        public Guid GenreId { get; set; }
-        public Genre? Genre { get; set; }
-        public Guid LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public string Genre { get; set; } = string.Empty;
+        public string Language { get; set; } = string.Empty;
         public IEnumerable<Review> Reviews { get; set; } = [];
         public IEnumerable<Tag> Tags { get; set; } = [];
         public Guid StatusId { get; set; }

@@ -9,8 +9,7 @@
         public DateOnly BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
         public string? LifeStory { get; set; }
-        public Guid CountryId { get; set; }
-        public Country? Country { get; set; }
+        public string CountryName { get; set; } = string.Empty;
         public IEnumerable<Book> Books { get; set; } = [];
     }
 }

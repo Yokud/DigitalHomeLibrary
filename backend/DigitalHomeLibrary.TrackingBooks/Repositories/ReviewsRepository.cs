@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace DigitalHomeLibrary.TrackingBooks.Repositories
 {
-    public class ReviewsRepository(TrackingBooksDbContext context) : IReviewsRepository
+    public class ReviewsRepository(TrackingBooksDbContext context) : IAsyncRepository<Review>
     {
         readonly TrackingBooksDbContext _context = context;
 

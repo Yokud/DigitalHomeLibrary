@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace DigitalHomeLibrary.TrackingBooks.Repositories
 {
-    public class BooksRepositry(TrackingBooksDbContext context) : IBooksRepository
+    public class BooksRepositry(TrackingBooksDbContext context) : IAsyncRepository<Book>
     {
         readonly TrackingBooksDbContext _context = context;
 
@@ -32,10 +32,8 @@ namespace DigitalHomeLibrary.TrackingBooks.Repositories
             if (paginationInfo is not null)
                 res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);
 
-            return await res.Include(e => e.Genre)
-                            .Include(e => e.Authors).ThenInclude(a => a.Country)
+            return await res.Include(e => e.Authors)
                             .Include(e => e.Status)
-                            .Include(e => e.Language)
                             .Include(e => e.Reviews)
                             .Include(e => e.Tags)
                             .AsNoTracking().ToListAsync();
@@ -44,10 +42,8 @@ namespace DigitalHomeLibrary.TrackingBooks.Repositories
         public async Task<Book?> GetAsync(Guid id)
         {
             return await _context.Books.Where(e => e.Id == id)
-                .Include(e => e.Genre)
-                .Include(e => e.Authors).ThenInclude(a => a.Country)
+                .Include(e => e.Authors)
                 .Include(e => e.Status)
-                .Include(e => e.Language)
                 .Include(e => e.Reviews)
                 .Include(e => e.Tags)
                 .AsNoTracking().SingleOrDefaultAsync();
@@ -67,9 +63,9 @@ namespace DigitalHomeLibrary.TrackingBooks.Repositories
                     SetProperty(e => e.Description, entity.Description).
                     SetProperty(e => e.ReleaseYear, entity.ReleaseYear).
                     SetProperty(e => e.Publisher, entity.Publisher).
-                    SetProperty(e => e.GenreId, entity.GenreId).
+                    SetProperty(e => e.Genre, entity.Genre).
                     SetProperty(e => e.StatusId, entity.StatusId).
-                    SetProperty(e => e.LanguageId, entity.LanguageId)
+                    SetProperty(e => e.Language, entity.Language)
                 );
         }
     }
