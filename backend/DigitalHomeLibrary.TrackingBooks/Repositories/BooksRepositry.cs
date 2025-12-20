@@ -61,11 +61,13 @@ namespace DigitalHomeLibrary.TrackingBooks.Repositories
                     SetProperty(e => e.Title, entity.Title).
                     SetProperty(e => e.ISBN, entity.ISBN).
                     SetProperty(e => e.Description, entity.Description).
+                    SetProperty(e => e.Authors, entity.Authors).
                     SetProperty(e => e.ReleaseYear, entity.ReleaseYear).
                     SetProperty(e => e.Publisher, entity.Publisher).
                     SetProperty(e => e.Genre, entity.Genre).
                     SetProperty(e => e.StatusId, entity.StatusId).
-                    SetProperty(e => e.Language, entity.Language)
+                    SetProperty(e => e.Language, entity.Language).
+                    SetProperty(e => e.Tags, entity.Tags)
                 );
         }
     }

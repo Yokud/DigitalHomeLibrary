@@ -7,9 +7,9 @@
         public string? MiddleName { get; set; }
         public string LastName { get; set; } = string.Empty;
         public DateOnly BirthDate { get; set; }
-        public DateTime? DeathDate { get; set; }
+        public DateOnly? DeathDate { get; set; }
         public string? LifeStory { get; set; }
         public string CountryName { get; set; } = string.Empty;
-        public IEnumerable<Book> Books { get; set; } = [];
+        public ICollection<Book> Books { get; set; } = [];
     }
 }

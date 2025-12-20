@@ -4,7 +4,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Services.Abstract
 {
     public interface IBookReviewsService
     {
-        Task<IEnumerable<Review>> GetBookReviews(Book book);
+        Task<IEnumerable<Review>> GetBookReviews(Guid bookId);
 
         Task<Guid> AddReviewToBook(Review review);
 
