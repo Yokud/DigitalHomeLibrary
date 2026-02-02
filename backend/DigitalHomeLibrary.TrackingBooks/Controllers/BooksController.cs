@@ -25,7 +25,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
         {
             var resp = (await _booksService.GetAuthors()).Skip((page - 1) * size).Take(size);
 
-            return Ok(new PaginationResponse<AuthorInfo>(page, size, resp.Count(), resp.Select(AuthorInfo.FromEntity)));
+            return Ok(new PaginationResponse<AuthorInfo>(page, size, resp.Count(), resp.Select(AuthorInfo.Fro)));
         }
 
         [HttpGet("books/{id}")]
@@ -65,7 +65,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
         public async Task<IActionResult> DeleteBook(Guid id)
         {
             await _booksService.DeleteBook(id);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch("books/{id}/set-reading")]

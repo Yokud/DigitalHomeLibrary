@@ -7,13 +7,13 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("books-info/reviews")]
+    [Route("books-info/{bookId}/reviews")]
     public class ReviewsController(IBookReviewsService bookReviewsService) : Controller
     {
         readonly IBookReviewsService _bookReviewsService = bookReviewsService;
 
-        [HttpGet("{bookId}")]
-        public async Task<IActionResult> GetBookReviews(Guid bookId, [FromQuery] int page, [FromQuery] int size)
+        [HttpGet]
+        public async Task<IActionResult> GetBookReviews([FromRoute] Guid bookId, [FromQuery] int page, [FromQuery] int size)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
             {
                 await _bookReviewsService.DeleteReview(reviewId);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
