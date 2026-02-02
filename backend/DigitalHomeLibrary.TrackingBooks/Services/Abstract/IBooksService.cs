@@ -22,6 +22,8 @@ namespace DigitalHomeLibrary.TrackingBooks.Services.Abstract
 
         Task DeleteBook(Guid bookId);
 
-        Task ChangeBookState(Guid bookId, ReadingState readingState);
+        Task SetBookStateReading(Guid bookId);
+
+        Task SetBookStateRead(Guid bookId);
     }
 }

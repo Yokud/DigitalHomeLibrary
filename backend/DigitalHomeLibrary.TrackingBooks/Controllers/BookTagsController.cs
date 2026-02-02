@@ -4,9 +4,9 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("books")]
-    public class TrackingBooksController : Controller
+    [Route("books-info/tags")]
+    public class BookTagsController : Controller
     {
-
+        
     }
 }
