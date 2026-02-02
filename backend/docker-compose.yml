@@ -4,3 +4,9 @@ services:
     build:
       context: .
       dockerfile: DigitalHomeLibrary.TrackingBooks/Dockerfile
+
+  digitalhomelibrary.digitalbooksstorage:
+    image: ${DOCKER_REGISTRY-}digitalhomelibrarydigitalbooksstorage
+    build:
+      context: .
+      dockerfile: DigitalHomeLibrary.DigitalBooksStorage/Dockerfile

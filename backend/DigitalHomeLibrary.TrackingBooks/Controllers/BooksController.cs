@@ -1,7 +1,6 @@
 ﻿using DigitalHomeLibrary.TrackingBooks.DTO;
 using DigitalHomeLibrary.TrackingBooks.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DigitalHomeLibrary.TrackingBooks.Controllers
 {
