@@ -25,7 +25,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
         {
             var resp = (await _booksService.GetAuthors()).Skip((page - 1) * size).Take(size);
 
-            return Ok(new PaginationResponse<AuthorInfo>(page, size, resp.Count(), resp.Select(AuthorInfo.Fro)));
+            return Ok(new PaginationResponse<AuthorInfo>(page, size, resp.Count(), resp.Select(AuthorInfo.FromEntity)));
         }
 
         [HttpGet("books/{id}")]
