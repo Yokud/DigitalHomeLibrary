@@ -4,9 +4,36 @@ services:
     build:
       context: .
       dockerfile: DigitalHomeLibrary.TrackingBooks/Dockerfile
+    networks:
+      - postgres
 
   digitalhomelibrary.digitalbooksstorage:
     image: ${DOCKER_REGISTRY-}digitalhomelibrarydigitalbooksstorage
     build:
       context: .
       dockerfile: DigitalHomeLibrary.DigitalBooksStorage/Dockerfile
+    networks:
+      - postgres
+
+  postgres:
+    container_name: postgres_container
+    image: postgres:14
+    environment:
+      POSTGRES_USER: books_tracker
+      POSTGRES_PASSWORD: hnrsygtgr
+      POSTGRES_DB: BooksDB
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
