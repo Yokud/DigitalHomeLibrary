@@ -14,20 +14,22 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddDbContext<TrackingBooksDbContext>(options =>
 {
     options.UseNpgsql("User ID=books_tracker;Password=hnrsygtgr;Host=postgres_container;Port=5432;Database=BooksDB;");
-}, ServiceLifetime.Singleton); 
+}); 
 
-builder.Services.AddSingleton<IAsyncRepository<Author>, AuthorsRepository>();
-builder.Services.AddSingleton<IAsyncRepository<Book>, BooksRepositry>();
-builder.Services.AddSingleton<IAsyncRepository<Review>, ReviewsRepository>();
-builder.Services.AddSingleton<IAsyncRepository<Status>, StatusesRepository>();
-builder.Services.AddSingleton<IAsyncRepository<Tag>, TagsRepository>();
+builder.Services.AddScoped<IAsyncRepository<Author>, AuthorsRepository>();
+builder.Services.AddScoped<IAsyncRepository<Book>, BooksRepositry>();
+builder.Services.AddScoped<IAsyncRepository<Review>, ReviewsRepository>();
+builder.Services.AddScoped<IAsyncRepository<Status>, StatusesRepository>();
+builder.Services.AddScoped<IAsyncRepository<Tag>, TagsRepository>();
 
-builder.Services.AddSingleton<IBooksService, BooksService>();
-builder.Services.AddSingleton<IBookTagsService, BooksTagsService>();
-builder.Services.AddSingleton<IBookReviewsService, BookReviesService>();
+builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped<IBookTagsService, BooksTagsService>();
+builder.Services.AddScoped<IBookReviewsService, BookReviesService>();
 
 var app = builder.Build();
 
