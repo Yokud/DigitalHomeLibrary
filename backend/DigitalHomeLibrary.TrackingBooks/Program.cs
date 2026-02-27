@@ -1,9 +1,10 @@
-using DigitalHomeLibrary.TrackingBooks.Domain.Entities;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Models;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories.Abstract;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Services;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
 using DigitalHomeLibrary.TrackingBooks.Domain.Models;
-using DigitalHomeLibrary.TrackingBooks.Repositories;
-using DigitalHomeLibrary.TrackingBooks.Repositories.Abstract;
-using DigitalHomeLibrary.TrackingBooks.Services;
-using DigitalHomeLibrary.TrackingBooks.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,10 +23,10 @@ builder.Services.AddDbContext<TrackingBooksDbContext>(options =>
 }); 
 
 builder.Services.AddScoped<IAsyncRepository<Author>, AuthorsRepository>();
-builder.Services.AddScoped<IAsyncRepository<Book>, BooksRepositry>();
-builder.Services.AddScoped<IAsyncRepository<Review>, ReviewsRepository>();
-builder.Services.AddScoped<IAsyncRepository<Status>, StatusesRepository>();
-builder.Services.AddScoped<IAsyncRepository<Tag>, TagsRepository>();
+builder.Services.AddScoped<IAsyncRepository<BookEntity>, BooksRepositry>();
+builder.Services.AddScoped<IAsyncRepository<ReviewEntity>, ReviewsRepository>();
+builder.Services.AddScoped<IAsyncRepository<StatusEntity>, StatusesRepository>();
+builder.Services.AddScoped<IAsyncRepository<TagEntity>, TagsRepository>();
 
 builder.Services.AddScoped<IBooksService, BooksService>();
 builder.Services.AddScoped<IBookTagsService, BooksTagsService>();

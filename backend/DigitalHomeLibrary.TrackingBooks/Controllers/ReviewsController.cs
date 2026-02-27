@@ -1,6 +1,6 @@
-﻿using DigitalHomeLibrary.TrackingBooks.Domain.Entities;
+﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
 using DigitalHomeLibrary.TrackingBooks.DTO;
-using DigitalHomeLibrary.TrackingBooks.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalHomeLibrary.TrackingBooks.Controllers
@@ -45,7 +45,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
         [HttpPost]
         public async Task<IActionResult> AddReviewToBook([FromBody] ReviewCreateRequest request)
         {
-            var review = new Review()
+            var review = new ReviewEntity()
             {
                 BookId = request.BookId,
                 Score = request.Score,

@@ -1,5 +1,5 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DTO;
-using DigitalHomeLibrary.TrackingBooks.Services.Abstract;
+﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
+using DigitalHomeLibrary.TrackingBooks.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalHomeLibrary.TrackingBooks.Controllers

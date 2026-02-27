@@ -1,6 +1,6 @@
-﻿using DigitalHomeLibrary.TrackingBooks.Domain.Entities;
+﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
+using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
 using DigitalHomeLibrary.TrackingBooks.DTO;
-using DigitalHomeLibrary.TrackingBooks.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalHomeLibrary.TrackingBooks.Controllers
@@ -15,7 +15,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTagToBook([FromRoute] Guid bookId, [FromBody] TagCreateRequest request)
         {
-            var tag = new Tag()
+            var tag = new TagEntity()
             {
                 Name = request.Name,
                 Description = request.Description ?? string.Empty
@@ -50,7 +50,7 @@ namespace DigitalHomeLibrary.TrackingBooks.Controllers
         [HttpPut("{tagId}")]
         public async Task<IActionResult> UpdateTag(Guid tagId, [FromBody] TagUpdateRequest request)
         {
-            var tag = new Tag()
+            var tag = new TagEntity()
             {
                 Id = tagId,
                 Name = request.Name,

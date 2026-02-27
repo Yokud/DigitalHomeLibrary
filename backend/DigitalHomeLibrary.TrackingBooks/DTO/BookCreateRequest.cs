@@ -1,12 +1,12 @@
-﻿using DigitalHomeLibrary.TrackingBooks.Domain.Entities;
+﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
 
 namespace DigitalHomeLibrary.TrackingBooks.DTO
 {
     public record BookInfo(string Title, string Description, int ReleaseYear, string Publisher, string ISBN,  string Genre, string Language)
     {
-        public static BookInfo FromEntity(Book book) => new(book.Title, book.Description, book.ReleaseYear, book.Publisher, book.ISBN, book.Genre, book.Language);
+        public static BookInfo FromEntity(BookEntity book) => new(book.Title, book.Description, book.ReleaseYear, book.Publisher, book.ISBN, book.Genre, book.Language);
 
-        public static Book ToEntity(BookInfo bookInfo) => new()
+        public static BookEntity ToEntity(BookInfo bookInfo) => new()
         {
             Title = bookInfo.Title,
             Description = bookInfo.Description,
