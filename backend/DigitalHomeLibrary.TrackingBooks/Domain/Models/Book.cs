@@ -1,18 +1,55 @@
-﻿namespace DigitalHomeLibrary.TrackingBooks.Domain.Models
+﻿using BookInfo = DigitalHomeLibrary.BookService.Domain.ValueObjects.BookInfo;
+
+namespace DigitalHomeLibrary.BookService.Domain.Models
 {
     public class Book
     {
-        public Guid Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public ICollection<Author> Authors { get; set; } = [];
-        public int ReleaseYear { get; set; }
-        public string Publisher { get; set; } = string.Empty;
-        public string ISBN { get; set; } = string.Empty;
-        public string Genre { get; set; } = string.Empty;
-        public string Language { get; set; } = string.Empty;
-        public ICollection<Review> Reviews { get; set; } = [];
-        public ICollection<Tag> Tags { get; set; } = [];
-        public Status? Status { get; set; }
+        private readonly List<Review> _reviews = [];
+        private readonly List<Tag> _tags = [];
+
+        public Book(BookInfo bookInfo)
+        {
+            ArgumentNullException.ThrowIfNull(bookInfo, nameof(bookInfo));
+
+            Id = Guid.NewGuid();
+            BookInfo = bookInfo;
+        }
+
+        public Guid Id { get; }
+        public BookInfo BookInfo { get; }
+        public IReadOnlyCollection<Review> Reviews => _reviews;
+        public IReadOnlyCollection<Tag> Tags => _tags;
+        public Status? Status { get; private set; }
+
+        public void InitState(DateTime additionDateTime)
+        {
+            Status = Status.GetSourceStatus(Id, additionDateTime);
+        }
+
+        public void SetStateToReading(DateOnly readingStartDate)
+        {
+            if (Status is null)
+                throw new InvalidOperationException("Book status is not inited");
+
+            Status = Status.GetReadingStatus(Status.BookId, Status.AdditionDateTime, readingStartDate);
+        }
+
+        public void SetStateToRead(DateOnly readingEndDate)
+        {
+            if (Status?.ReadingStartDate is null)
+                throw new InvalidOperationException("Book cannot be read before reading");
+
+            Status = Status.GetReadStatus(Status.BookId, Status.AdditionDateTime, Status.ReadingStartDate.Value, readingEndDate);
+        }
+
+        public void AddReview(Review review)
+        {
+            _reviews.Add(review);
+        }
+
+        public void AddTag(Tag tag)
+        {
+            _tags.Add(tag);
+        }
     }
 }

@@ -1,11 +1,21 @@
-﻿namespace DigitalHomeLibrary.TrackingBooks.Domain.Models
+﻿using DigitalHomeLibrary.BookService.Domain.ValueObjects;
+
+namespace DigitalHomeLibrary.BookService.Domain.Models
 {
-    public class Review
+    public sealed class Review
     {
-        public Guid Id { get; set; }
-        public Guid BookId { get; set; }
-        public byte Score { get; set; }
-        public string Note { get; set; } = string.Empty;
-        public Book? ReviewedBook { get; set; }
+        public Review(Guid reviewedBookId, Score score, string note)
+        {
+            if (string.IsNullOrWhiteSpace(note))
+                throw new ArgumentException("Note cannot be null, empty or contains only whitespaces", nameof(note));
+
+            ReviewedBookId = reviewedBookId;
+            Score = score;
+            Note = note;
+        }
+
+        public Guid ReviewedBookId { get; private set; }
+        public Score Score { get; private set; }
+        public string Note { get; private set; }
     }
 }

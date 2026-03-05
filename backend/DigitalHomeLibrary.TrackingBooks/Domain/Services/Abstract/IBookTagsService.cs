@@ -1,6 +1,6 @@
-﻿using DigitalHomeLibrary.TrackingBooks.Domain.Models;
+﻿using DigitalHomeLibrary.BookService.Domain.Models;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract
+namespace DigitalHomeLibrary.BookService.DataAccess.Services.Abstract
 {
     public interface IBookTagsService
     {

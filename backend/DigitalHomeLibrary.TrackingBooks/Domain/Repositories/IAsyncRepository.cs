@@ -1,13 +1,13 @@
-﻿using DigitalHomeLibrary.TrackingBooks.Infractructure;
+﻿using DigitalHomeLibrary.BookService.Infractructure;
 using System.Linq.Expressions;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories.Abstract
+namespace DigitalHomeLibrary.BookService.Domain.Repositories
 {
     public interface IAsyncRepository<T>
     {
-        Task<T?> GetAsync(Guid id);
+        Task<T?> GetByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, PaginationInfo? paginationInfo = null);
-        Task<Guid> CreateAsync(T entity);
+        Task<Guid> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(Guid id);
         Task SaveAsync();

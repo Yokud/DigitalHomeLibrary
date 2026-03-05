@@ -1,10 +1,9 @@
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Models;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories.Abstract;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Services;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
-using DigitalHomeLibrary.TrackingBooks.Domain.Models;
+using DigitalHomeLibrary.BookService.DataAccess.Repositories;
+using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
+using DigitalHomeLibrary.BookService.Domain.Repositories;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
+using DigitalHomeLibrary.BookService.Infractructure.Repositories;
+using DigitalHomeLibrary.BookService.Infractructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,20 +16,16 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddDbContext<TrackingBooksDbContext>(options =>
+builder.Services.AddDbContext<BookServiceDbContext>(options =>
 {
     options.UseNpgsql("User ID=books_tracker;Password=hnrsygtgr;Host=postgres_container;Port=5432;Database=BooksDB;");
 }); 
 
-builder.Services.AddScoped<IAsyncRepository<Author>, AuthorsRepository>();
-builder.Services.AddScoped<IAsyncRepository<BookEntity>, BooksRepositry>();
-builder.Services.AddScoped<IAsyncRepository<ReviewEntity>, ReviewsRepository>();
-builder.Services.AddScoped<IAsyncRepository<StatusEntity>, StatusesRepository>();
-builder.Services.AddScoped<IAsyncRepository<TagEntity>, TagsRepository>();
+builder.Services.AddScoped<IBooksRepository, EFCoreBooksRepository>();
+builder.Services.AddScoped<ITagsRepository, EFCoreTagsRepository>();
 
 builder.Services.AddScoped<IBooksService, BooksService>();
 builder.Services.AddScoped<IBookTagsService, BooksTagsService>();
-builder.Services.AddScoped<IBookReviewsService, BookReviesService>();
 
 var app = builder.Build();
 

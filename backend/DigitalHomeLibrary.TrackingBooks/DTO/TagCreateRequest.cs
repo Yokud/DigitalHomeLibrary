@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.TrackingBooks.DTO
+﻿namespace DigitalHomeLibrary.BookService.DTO
 {
     public record TagCreateRequest(string Name, string? Description)
     {

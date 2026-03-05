@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Entities
+﻿namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities
 {
     public class BookEntity
     {

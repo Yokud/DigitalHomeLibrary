@@ -1,18 +1,18 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Models;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories.Abstract;
-using DigitalHomeLibrary.TrackingBooks.Domain.Models;
-using DigitalHomeLibrary.TrackingBooks.Infractructure;
+﻿using DigitalHomeLibrary.BookService.DataAccess.Repositories;
+using DigitalHomeLibrary.BookService.Domain.Models;
+using DigitalHomeLibrary.BookService.Infractructure;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories
+namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 {
-    public class TagsRepository(TrackingBooksDbContext context) : IAsyncRepository<Tag>
+    public class EFCoreTagsRepository(BookServiceDbContext context) : ITagsRepository
     {
-        readonly TrackingBooksDbContext _context = context;
+        readonly BookServiceDbContext _context = context;
 
-        public async Task<Guid> CreateAsync(Tag entity)
+        public async Task<Guid> AddAsync(Tag entity)
         {
             await _context.Tags.AddAsync(entity);
             return entity.Id;
@@ -36,7 +36,7 @@ namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories
             return await res.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Tag?> GetAsync(Guid id)
+        public async Task<Tag?> GetByIdAsync(Guid id)
         {
             return await _context.Tags.Where(e => e.Id == id).AsNoTracking().SingleOrDefaultAsync();
         }

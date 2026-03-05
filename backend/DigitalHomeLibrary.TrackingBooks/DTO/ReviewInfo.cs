@@ -1,6 +1,6 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
+﻿using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
 
-namespace DigitalHomeLibrary.TrackingBooks.DTO
+namespace DigitalHomeLibrary.BookService.DTO
 {
     public record ReviewInfo(byte Score, string Note, BookInfo ReviewedBook)
     {

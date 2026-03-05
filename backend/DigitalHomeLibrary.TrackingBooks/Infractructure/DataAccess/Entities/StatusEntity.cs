@@ -1,6 +1,6 @@
-﻿using DigitalHomeLibrary.TrackingBooks.Domain.Models;
+﻿using DigitalHomeLibrary.BookService.Domain.Models;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Entities
+namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities
 {
     public class StatusEntity
     {

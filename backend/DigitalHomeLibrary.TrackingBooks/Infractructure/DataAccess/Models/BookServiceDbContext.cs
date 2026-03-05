@@ -1,19 +1,18 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Models.Configurations;
-using DigitalHomeLibrary.TrackingBooks.Domain.Models;
+﻿using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models.Configurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Models
+namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models
 {
-    public class TrackingBooksDbContext : DbContext
+    public class BookServiceDbContext : DbContext
     {
         public DbSet<BookEntity> Books { get; set; }
-        public DbSet<Author> Authors { get; set; }
+        public DbSet<AuthorEntity> Authors { get; set; }
         public DbSet<ReviewEntity> Reviews { get; set; }
         public DbSet<StatusEntity> BookStatuses { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
 
-        public TrackingBooksDbContext(DbContextOptions<TrackingBooksDbContext> options) : base(options)
+        public BookServiceDbContext(DbContextOptions<BookServiceDbContext> options) : base(options)
         {
             Database.Migrate();
         }

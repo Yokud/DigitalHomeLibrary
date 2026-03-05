@@ -1,13 +1,13 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
-using DigitalHomeLibrary.TrackingBooks.Domain.Models;
-using DigitalHomeLibrary.TrackingBooks.Infractructure;
+﻿using DigitalHomeLibrary.BookService.Domain.Models;
+using DigitalHomeLibrary.BookService.Infractructure;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
 using System.Linq.Expressions;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract
+namespace DigitalHomeLibrary.BookService.DataAccess.Services.Abstract
 {
     public interface IBooksService
     {
-        Task<BookEntity?> GetBook(Guid bookId);
+        Task<Book?> GetBook(Guid bookId);
 
         Task<Author?> GetAuthor(Guid authorId);
 
@@ -26,5 +26,9 @@ namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract
         Task SetBookStateReading(Guid bookId);
 
         Task SetBookStateRead(Guid bookId);
+
+        Task<IEnumerable<Review>> GetBookReviews(Guid bookId);
+
+        Task<Guid> AddReviewToBook(Review review);
     }
 }

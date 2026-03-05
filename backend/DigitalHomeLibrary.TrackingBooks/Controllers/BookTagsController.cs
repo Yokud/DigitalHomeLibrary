@@ -1,9 +1,9 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
-using DigitalHomeLibrary.TrackingBooks.DTO;
+﻿using DigitalHomeLibrary.BookService.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
+using DigitalHomeLibrary.BookService.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DigitalHomeLibrary.TrackingBooks.Controllers
+namespace DigitalHomeLibrary.BookService.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]

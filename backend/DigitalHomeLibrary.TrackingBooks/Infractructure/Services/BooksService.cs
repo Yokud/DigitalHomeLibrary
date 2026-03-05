@@ -1,17 +1,13 @@
-﻿using DigitalHomeLibrary.TrackingBooks.DataAccess.Entities;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Repositories.Abstract;
-using DigitalHomeLibrary.TrackingBooks.DataAccess.Services.Abstract;
-using DigitalHomeLibrary.TrackingBooks.Domain.Models;
-using DigitalHomeLibrary.TrackingBooks.Infractructure;
+﻿using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
+using DigitalHomeLibrary.BookService.Domain.Models;
+using DigitalHomeLibrary.BookService.Domain.Repositories;
 using System.Linq.Expressions;
 
-namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Services
+namespace DigitalHomeLibrary.BookService.Infractructure.Services
 {
-    public class BooksService(IAsyncRepository<Book> booksRepository, IAsyncRepository<Author> authorsRepository, IAsyncRepository<Status> statusesRepository) : IBooksService
+    public class BooksService(IBooksRepository booksRepository) : IBooksService
     {
-        readonly IAsyncRepository<Book> _booksRepository = booksRepository;
-        readonly IAsyncRepository<Author> _authorsRepository = authorsRepository;
-        readonly IAsyncRepository<Status> _statusesRepository = statusesRepository;
+        readonly IBooksRepository _booksRepository = booksRepository;
 
         public async Task<Guid> AddBook(Book book, IEnumerable<Author> authors)
         {
@@ -106,6 +102,19 @@ namespace DigitalHomeLibrary.TrackingBooks.DataAccess.Services
         {
             await _booksRepository.UpdateAsync(book);
             await _booksRepository.SaveAsync();
+        }
+
+        public async Task<Guid> AddReviewToBook(Review review)
+        {
+            var reviewId = await _reviewsRepository.CreateAsync(review);
+            await _reviewsRepository.SaveAsync();
+
+            return reviewId;
+        }
+
+        public async Task<IEnumerable<Review>> GetBookReviews(Guid bookId)
+        {
+            return await _reviewsRepository.GetAllAsync((review) => review.ReviewedBookId == bookId);
         }
     }
 }
