@@ -1,10 +1,10 @@
 ﻿using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
-namespace DigitalHomeLibrary.BookService.Domain.Models
+namespace DigitalHomeLibrary.BookService.Domain.Entities
 {
-    public sealed class Author
+    public sealed class Author : DomainEntity
     {
-        public Author(FullName fullName, DateOnly birthDate, Country country, DateOnly? deathDate, string? lifeStory)
+        public Author(Guid id, FullName fullName, DateOnly birthDate, Country country, DateOnly? deathDate, string? lifeStory) : base(id)
         {
             ArgumentNullException.ThrowIfNull(fullName, nameof(fullName));
             ArgumentNullException.ThrowIfNull(country, nameof(country));
@@ -12,7 +12,6 @@ namespace DigitalHomeLibrary.BookService.Domain.Models
             if (deathDate is not null && deathDate.Value <= BirthDate)
                 throw new ArgumentException("Author cannot be dead before own birth");
 
-            Id = Guid.NewGuid();
             FullName = fullName;
             BirthDate = birthDate;
             Country = country;
@@ -20,12 +19,11 @@ namespace DigitalHomeLibrary.BookService.Domain.Models
             LifeStory = lifeStory;
         }
 
-        public Author(FullName fullName, DateOnly birthDate, Country country) : this(fullName, birthDate, country, null, null)
+        public Author(FullName fullName, DateOnly birthDate, Country country, DateOnly? deathDate, string? lifeStory) : this(Guid.NewGuid(), fullName, birthDate, country, deathDate, lifeStory)
         {
 
         }
 
-        public Guid Id { get; }
         public FullName FullName { get; private set; }
         public DateOnly BirthDate { get; private set; }
         public DateOnly? DeathDate { get; private set; }

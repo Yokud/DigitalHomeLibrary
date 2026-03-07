@@ -1,4 +1,4 @@
-﻿using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
+﻿using DigitalHomeLibrary.BookService.Domain.Services;
 using DigitalHomeLibrary.BookService.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +7,14 @@ namespace DigitalHomeLibrary.BookService.Controllers
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("books-info")]
-    public class BooksController(IBooksService booksService) : Controller
+    public class BooksController(IBookService booksService) : Controller
     {
-        readonly IBooksService _booksService = booksService;
+        readonly IBookService _booksService = booksService;
 
         [HttpGet("books")]
         public async Task<IActionResult> GetBooks([FromQuery] int page, [FromQuery] int size)
         {
-            var resp = (await _booksService.GetBooks()).Skip((page - 1) * size).Take(size);
+            var resp = (await _booksService.FindBooks()).Skip((page - 1) * size).Take(size);
 
             return Ok(new PaginationResponse<BookInfo>(page, size, resp.Count(), resp.Select(BookInfo.FromEntity)));
         }
@@ -30,7 +30,7 @@ namespace DigitalHomeLibrary.BookService.Controllers
         [HttpGet("books/{id}")]
         public async Task<IActionResult> GetBook(Guid id)
         {
-            var book = await _booksService.GetBook(id);
+            var book = await _booksService.GetBookById(id);
 
             return book is not null ? Ok(BookInfo.FromEntity(book)) : NotFound();
         }

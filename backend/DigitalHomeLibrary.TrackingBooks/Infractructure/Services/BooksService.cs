@@ -1,13 +1,14 @@
-﻿using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
-using DigitalHomeLibrary.BookService.Domain.Models;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
+using DigitalHomeLibrary.BookService.Domain.Services;
+using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 using System.Linq.Expressions;
 
 namespace DigitalHomeLibrary.BookService.Infractructure.Services
 {
-    public class BooksService(IBooksRepository booksRepository) : IBooksService
+    public class BooksService(IBookRepository booksRepository) : IBookService
     {
-        readonly IBooksRepository _booksRepository = booksRepository;
+        readonly IBookRepository _booksRepository = booksRepository;
 
         public async Task<Guid> AddBook(Book book, IEnumerable<Author> authors)
         {
@@ -51,14 +52,14 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Services
             return await _authorsRepository.GetAllAsync(filter, paginationInfo) ?? [];
         }
 
-        public async Task<Book?> GetBook(Guid bookId)
+        public async Task<Book?> GetBookById(Guid bookId)
         {
             return await _booksRepository.GetAsync(bookId);
         }
 
-        public async Task<IEnumerable<Book>> GetBooks(Expression<Func<Book, bool>>? filter = null, PaginationInfo? paginationInfo = null)
+        public async Task<IEnumerable<Book>> FindBooks(Expression<Func<Book, bool>>? filter = null, PaginationInfo? paginationInfo = null)
         {
-            return await _booksRepository.GetAllAsync(filter, paginationInfo) ?? [];
+            return await _booksRepository.FindAsync(filter, paginationInfo) ?? [];
         }
 
         public async Task SetBookStateRead(Guid bookId)

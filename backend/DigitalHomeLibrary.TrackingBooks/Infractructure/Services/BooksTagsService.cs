@@ -1,16 +1,16 @@
 ﻿using DigitalHomeLibrary.BookService.DataAccess.Repositories;
-using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
-using DigitalHomeLibrary.BookService.Domain.Models;
+using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
+using DigitalHomeLibrary.BookService.Domain.Services;
 
 namespace DigitalHomeLibrary.BookService.Infractructure.Services
 {
-    public class BooksTagsService(IBooksRepository booksRepository, ITagsRepository tagsRepository) : IBookTagsService
+    public class BooksTagsService(IBookRepository booksRepository, ITagsRepository tagsRepository) : IBookTagService
     {
         readonly IAsyncRepository<Book> _booksRepository = booksRepository;
-        readonly IAsyncRepository<Tag> _tagsRepository = tagsRepository;
+        readonly IAsyncRepository<BookTag> _tagsRepository = tagsRepository;
 
-        public async Task<Guid> AddTagToBook(Guid bookId, Tag tag)
+        public async Task<Guid> AddTagToBook(Guid bookId, BookTag tag)
         {
             var book = await _booksRepository.GetByIdAsync(bookId) ?? throw new Exception("Not found book");
 
@@ -27,12 +27,12 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Services
             await _tagsRepository.SaveAsync();
         }
 
-        public async Task<IEnumerable<Tag>> GetBookTags(Guid bookId)
+        public async Task<IEnumerable<BookTag>> GetBookTags(Guid bookId)
         {
             return (await _booksRepository.GetByIdAsync(bookId))?.Tags ?? [];
         }
 
-        public async Task UpdateTag(Tag tag)
+        public async Task UpdateTag(BookTag tag)
         {
             await _tagsRepository.UpdateAsync(tag);
             await _tagsRepository.SaveAsync();

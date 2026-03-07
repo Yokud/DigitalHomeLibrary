@@ -1,6 +1,6 @@
 using DigitalHomeLibrary.BookService.DataAccess.Repositories;
-using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
+using DigitalHomeLibrary.BookService.Domain.Services;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using DigitalHomeLibrary.BookService.Infractructure.Repositories;
 using DigitalHomeLibrary.BookService.Infractructure.Services;
@@ -21,11 +21,11 @@ builder.Services.AddDbContext<BookServiceDbContext>(options =>
     options.UseNpgsql("User ID=books_tracker;Password=hnrsygtgr;Host=postgres_container;Port=5432;Database=BooksDB;");
 }); 
 
-builder.Services.AddScoped<IBooksRepository, EFCoreBooksRepository>();
-builder.Services.AddScoped<ITagsRepository, EFCoreTagsRepository>();
+builder.Services.AddScoped<IBookRepository, EFCoreBookRepository>();
+builder.Services.AddScoped<ITagsRepository, EFCoreBookTagRepository>();
 
-builder.Services.AddScoped<IBooksService, BooksService>();
-builder.Services.AddScoped<IBookTagsService, BooksTagsService>();
+builder.Services.AddScoped<IBookService, BooksService>();
+builder.Services.AddScoped<IBookTagService, BooksTagsService>();
 
 var app = builder.Build();
 

@@ -1,24 +1,28 @@
-﻿using BookInfo = DigitalHomeLibrary.BookService.Domain.ValueObjects.BookInfo;
+﻿using DigitalHomeLibrary.BookService.Domain.ValueObjects;
+using BookInfo = DigitalHomeLibrary.BookService.Domain.ValueObjects.BookInfo;
 
-namespace DigitalHomeLibrary.BookService.Domain.Models
+namespace DigitalHomeLibrary.BookService.Domain.Entities
 {
-    public class Book
+    public class Book : DomainEntity
     {
         private readonly List<Review> _reviews = [];
-        private readonly List<Tag> _tags = [];
+        private readonly List<BookTag> _tags = [];
 
-        public Book(BookInfo bookInfo)
+        public Book(Guid id, BookInfo bookInfo) : base(id)
         {
             ArgumentNullException.ThrowIfNull(bookInfo, nameof(bookInfo));
 
-            Id = Guid.NewGuid();
             BookInfo = bookInfo;
         }
 
-        public Guid Id { get; }
+        public Book(BookInfo bookInfo) : this(Guid.NewGuid(), bookInfo)
+        {
+
+        }
+
         public BookInfo BookInfo { get; }
         public IReadOnlyCollection<Review> Reviews => _reviews;
-        public IReadOnlyCollection<Tag> Tags => _tags;
+        public IReadOnlyCollection<BookTag> Tags => _tags;
         public Status? Status { get; private set; }
 
         public void InitState(DateTime additionDateTime)
@@ -47,9 +51,11 @@ namespace DigitalHomeLibrary.BookService.Domain.Models
             _reviews.Add(review);
         }
 
-        public void AddTag(Tag tag)
+        public void AddTag(BookTag tag)
         {
             _tags.Add(tag);
         }
+
+        public double GetAverageScore() => Reviews.Select(e => e.Score.ScoreValue).Average();
     }
 }

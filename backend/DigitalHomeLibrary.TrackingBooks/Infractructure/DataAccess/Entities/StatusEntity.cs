@@ -1,4 +1,4 @@
-﻿using DigitalHomeLibrary.BookService.Domain.Models;
+﻿using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities
 {

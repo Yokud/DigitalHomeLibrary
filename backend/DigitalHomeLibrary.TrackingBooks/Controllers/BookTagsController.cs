@@ -1,5 +1,5 @@
 ﻿using DigitalHomeLibrary.BookService.DataAccess.Entities;
-using DigitalHomeLibrary.BookService.DataAccess.Services.Abstract;
+using DigitalHomeLibrary.BookService.Domain.Services;
 using DigitalHomeLibrary.BookService.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +8,9 @@ namespace DigitalHomeLibrary.BookService.Controllers
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("books-info/{bookId}/tags")]
-    public class BookTagsController(IBookTagsService bookTagsService) : Controller
+    public class BookTagsController(IBookTagService bookTagsService) : Controller
     {
-        readonly IBookTagsService _bookTagsService = bookTagsService;
+        readonly IBookTagService _bookTagsService = bookTagsService;
 
         [HttpPost]
         public async Task<IActionResult> AddTagToBook([FromRoute] Guid bookId, [FromBody] TagCreateRequest request)

@@ -1,10 +1,10 @@
 ﻿using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
-namespace DigitalHomeLibrary.BookService.Domain.Models
+namespace DigitalHomeLibrary.BookService.Domain.Entities
 {
-    public sealed class Review
+    public sealed class Review : DomainEntity
     {
-        public Review(Guid reviewedBookId, Score score, string note)
+        public Review(Guid id, Guid reviewedBookId, Score score, string note) : base(id)
         {
             if (string.IsNullOrWhiteSpace(note))
                 throw new ArgumentException("Note cannot be null, empty or contains only whitespaces", nameof(note));
@@ -12,6 +12,11 @@ namespace DigitalHomeLibrary.BookService.Domain.Models
             ReviewedBookId = reviewedBookId;
             Score = score;
             Note = note;
+        }
+
+        public Review(Guid reviewedBookId, Score score, string note) : this(Guid.NewGuid(), reviewedBookId, score, note)
+        {
+            
         }
 
         public Guid ReviewedBookId { get; private set; }

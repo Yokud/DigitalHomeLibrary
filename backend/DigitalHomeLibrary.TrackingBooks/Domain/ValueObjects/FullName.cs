@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DigitalHomeLibrary.BookService.Domain.ValueObjects
+﻿namespace DigitalHomeLibrary.BookService.Domain.ValueObjects
 {
     public sealed class FullName : IEquatable<FullName>
     {
@@ -17,9 +15,9 @@ namespace DigitalHomeLibrary.BookService.Domain.ValueObjects
             if (middleName is not null && (!middleName.All(char.IsLetter) || middleName.Length < MinNameLen))
                 throw new ArgumentException($"Middle name must contains only letters and len greater or equal {MinNameLen}");
 
-            FirstName = firstName;
-            LastName = lastName;
-            MiddleName = middleName;
+            FirstName = CapitalizeFirstLetter(firstName);
+            LastName = CapitalizeFirstLetter(lastName);
+            MiddleName = string.IsNullOrEmpty(middleName) ? middleName : CapitalizeFirstLetter(middleName);
         }
 
         public string FirstName { get; }
@@ -34,14 +32,12 @@ namespace DigitalHomeLibrary.BookService.Domain.ValueObjects
             return FirstName == other.FirstName && LastName == other.LastName && MiddleName == other.MiddleName;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as FullName);
-        }
+        public override bool Equals(object? obj) => Equals(obj as FullName);
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(FirstName, LastName, MiddleName);
-        }
+        public override int GetHashCode() => HashCode.Combine(FirstName, LastName, MiddleName);
+
+        public override string ToString() => string.Join(' ', LastName, FirstName, MiddleName);
+
+        static string CapitalizeFirstLetter(string input) => string.IsNullOrEmpty(input) ? input : char.ToUpper(input[0]) + input.Substring(1);
     }
 }

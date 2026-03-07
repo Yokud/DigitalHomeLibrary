@@ -1,6 +1,5 @@
-﻿using DigitalHomeLibrary.BookService.Domain.Models;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
-using DigitalHomeLibrary.BookService.Infractructure;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 {
-    public class EFCoreBooksRepository(BookServiceDbContext context) : IBooksRepository
+    public class EFCoreBookRepository(BookServiceDbContext context) : IBookRepository
     {
         readonly BookServiceDbContext _context = context;
 
@@ -21,9 +20,10 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             await _context.Books.Where(e => e.Id == id).ExecuteDeleteAsync();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetAllAsync(Expression<Func<Book, bool>>? filter = null, PaginationInfo? paginationInfo = null)
+        public async Task<IEnumerable<Book>> FindAsync(Expression<Func<Book, bool>>? filter = null, PaginationInfo? paginationInfo = null)
         {
             IQueryable<BookEntity> res = _context.Books;
 
@@ -52,14 +52,11 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
         }
 
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
         public Task UpdateAsync(Book entity)
         {
             throw new NotImplementedException();
+
+            await _context.SaveChangesAsync();
         }
     }
 }

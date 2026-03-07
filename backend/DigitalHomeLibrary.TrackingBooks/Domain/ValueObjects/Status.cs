@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.BookService.Domain.Models
+﻿namespace DigitalHomeLibrary.BookService.Domain.ValueObjects
 {
     public enum ReadingState
     {
