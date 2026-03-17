@@ -1,17 +1,17 @@
 services:
-  digitalhomelibrary.trackingbooks:
-    image: ${DOCKER_REGISTRY-}digitalhomelibrarytrackingbooks
+  digitalhomelibrary.book:
+    image: ${DOCKER_REGISTRY-}digitalhomelibrarybookservice
     build:
       context: .
-      dockerfile: DigitalHomeLibrary.TrackingBooks/Dockerfile
+      dockerfile: DigitalHomeLibrary.BookService/Dockerfile
     networks:
       - postgres
 
-  digitalhomelibrary.digitalbooksstorage:
-    image: ${DOCKER_REGISTRY-}digitalhomelibrarydigitalbooksstorage
+  digitalhomelibrary.content:
+    image: ${DOCKER_REGISTRY-}digitalhomelibrarycontentservice
     build:
       context: .
-      dockerfile: DigitalHomeLibrary.DigitalBooksStorage/Dockerfile
+      dockerfile: DigitalHomeLibrary.ContentService/Dockerfile
     networks:
       - postgres
       - minio
