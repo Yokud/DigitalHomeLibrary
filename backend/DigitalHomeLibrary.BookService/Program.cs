@@ -18,7 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<BookServiceDbContext>(options =>
 {
     options.UseNpgsql("User ID=books_tracker;Password=hnrsygtgr;Host=postgres_container;Port=5432;Database=BooksDB;");
-}); 
+});
 
 builder.Services.AddScoped<IBookRepository, EFCoreBookRepository>();
 builder.Services.AddScoped<IAuthorRepository, EFCoreAuthorRepository>();
@@ -32,6 +32,10 @@ builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<BookTagsService>();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<BookServiceDbContext>();
+context.Database.EnsureCreated();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

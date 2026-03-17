@@ -13,7 +13,7 @@ namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models
 
         public BookServiceDbContext(DbContextOptions<BookServiceDbContext> options) : base(options)
         {
-            Database.EnsureCreated();
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
