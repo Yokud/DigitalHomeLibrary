@@ -77,8 +77,6 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
         {
             var bookEntity = await _context.Books.Where(e => e.Id == id)
                 .Include(e => e.Authors)
-                .Include(e => e.Reviews)
-                .Include(e => e.Tags)
                 .AsNoTracking().SingleOrDefaultAsync();
 
             return bookEntity is not null ? new(bookEntity.Id, new(bookEntity.Title, bookEntity.Description, bookEntity.Authors.Select(a => a.Id), bookEntity.ReleaseYear, bookEntity.Publisher, new(bookEntity.ISBN), bookEntity.Genre, bookEntity.Language)) : null;

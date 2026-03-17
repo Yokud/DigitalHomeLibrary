@@ -23,7 +23,7 @@ namespace DigitalHomeLibrary.BookService.Controllers
             return res.IsSuccess ? Ok(AuthorInfo.FromDomainEntity(res.Value)) : NotFound(res.Error);
         }
 
-        [HttpGet("{firstname} {lastname} {middlename}")]
+        [HttpGet("\"{firstname} {lastname} {middlename}\"")]
         public async Task<IActionResult> FindAuthorByFullName(string firstname, string lastname, string? middlename)
         {
             var res = await _authorService.FindAuthorByFullName(new(firstname, lastname, middlename));

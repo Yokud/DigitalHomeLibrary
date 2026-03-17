@@ -38,15 +38,15 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
         public async Task<Author?> FindByFullNameAsync(FullName fullName)
         {
-            var authorEntity = await _context.Authors.Where(e => e.FirstName == fullName.FirstName && e.LastName == fullName.LastName && e.MiddleName == fullName.MiddleName)
-                .FirstOrDefaultAsync();
+            var authorEntity = await _context.Authors.Where(e => e.FirstName == fullName.FirstName && e.LastName == fullName.LastName && e.MiddleName == fullName.MiddleName).AsNoTracking()
+                .SingleOrDefaultAsync();
 
             return authorEntity is null ? null : new Author(authorEntity.Id, new(authorEntity.FirstName, authorEntity.LastName, authorEntity.MiddleName), authorEntity.BirthDate, new(authorEntity.CountryName), authorEntity.DeathDate, authorEntity.LifeStory);
         }
 
         public async Task<Author?> GetByIdAsync(Guid id)
         {
-            var authorEntity = await _context.Authors.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var authorEntity = await _context.Authors.Where(e => e.Id == id).AsNoTracking().FirstOrDefaultAsync();
 
             return authorEntity is null ? null : new Author(authorEntity.Id, new(authorEntity.FirstName, authorEntity.LastName, authorEntity.MiddleName), authorEntity.BirthDate, new(authorEntity.CountryName), authorEntity.DeathDate, authorEntity.LifeStory);
         }
