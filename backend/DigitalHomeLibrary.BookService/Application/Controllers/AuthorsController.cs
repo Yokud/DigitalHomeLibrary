@@ -40,7 +40,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             return res.IsSuccess ? Ok(AuthorInfo.FromDomainEntity(res.Value)) : BadRequest(res.Error);
         }
 
-        [HttpGet("/books/{bookId}")]
+        [HttpGet("books/{bookId}")]
         public async Task<IActionResult> GetBookAuthors(Guid bookId)
         {
             var res = await _authorService.GetBookAuthors(bookId);

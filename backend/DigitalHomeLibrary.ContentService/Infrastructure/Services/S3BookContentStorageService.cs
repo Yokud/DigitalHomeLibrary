@@ -1,6 +1,7 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using Amazon.S3.Util;
 using DigitalHomeLibrary.ContentService.Domain.Services;
 
 namespace DigitalHomeLibrary.ContentService.Infrastructure.Services
@@ -54,6 +55,17 @@ namespace DigitalHomeLibrary.ContentService.Infrastructure.Services
 
         public async Task<string> UploadFile(IFormFile file, string keyName, Action<int>? progressCallback = null)
         {
+            var bucketExists = await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName);
+            if (!bucketExists)
+            {
+                var putBucketRequest = new PutBucketRequest
+                {
+                    BucketName = _bucketName,
+                };
+
+                _ = await _s3Client.PutBucketAsync(putBucketRequest);
+            }
+
             using MemoryStream memoryStream = new();
             file.CopyTo(memoryStream);
 

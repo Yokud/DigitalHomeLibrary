@@ -1,3 +1,4 @@
+using DigitalHomeLibrary.ContentService.Application.Services;
 using DigitalHomeLibrary.ContentService.Domain.Repositories;
 using DigitalHomeLibrary.ContentService.Domain.Services;
 using DigitalHomeLibrary.ContentService.Infrastructure.DataAccess;
@@ -13,6 +14,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Configuration.AddJsonFile("appsettings.json");
+
 builder.Services.AddDbContext<ContentServiceDbContext>(options =>
 {
     options.UseNpgsql("User ID=content_db;Password=content_db;Host=postgres;Port=5432;Database=content_db;");
@@ -20,6 +23,7 @@ builder.Services.AddDbContext<ContentServiceDbContext>(options =>
 
 builder.Services.AddScoped<IBookContentDataRepository, EFCoreBookContentDataRepository>();
 builder.Services.AddScoped<IBookContentStorageService, S3BookContentStorageService>();
+builder.Services.AddScoped<BookContentService>();
 
 var app = builder.Build();
 

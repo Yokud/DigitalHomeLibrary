@@ -1,5 +1,6 @@
 services:
   digitalhomelibrary.book:
+    container_name: book_service
     image: ${DOCKER_REGISTRY-}digitalhomelibrarybookservice
     build:
       context: .
@@ -22,6 +23,7 @@ services:
       - postgres
 
   digitalhomelibrary.content:
+    container_name: content_service
     image: ${DOCKER_REGISTRY-}digitalhomelibrarycontentservice
     build:
       context: .

@@ -15,6 +15,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Configuration.AddJsonFile("appsettings.json");
+
 builder.Services.AddDbContext<BookServiceDbContext>(options =>
 {
     options.UseNpgsql("User ID=book_db;Password=book_db;Host=postgres;Port=5432;Database=book_db;");

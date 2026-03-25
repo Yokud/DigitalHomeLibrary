@@ -6,12 +6,12 @@ namespace DigitalHomeLibrary.ContentService.Application.Controllers
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("books-files")]
-    public class DigitalBooksStorageController(BookContentService bookContentService) : Controller
+    public class BookContentController(BookContentService bookContentService) : Controller
     {
         readonly BookContentService _bookContentService = bookContentService;
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadDigitalBook([FromQuery] Guid bookId, [FromBody] IFormFile file, [FromQuery] string path = "")
+        public async Task<IActionResult> UploadDigitalBook([FromQuery] Guid bookId, [FromForm] IFormFile file, [FromQuery] string path = "")
         {
             var res = await _bookContentService.UploadDigitalBook(bookId, file, path);
 
