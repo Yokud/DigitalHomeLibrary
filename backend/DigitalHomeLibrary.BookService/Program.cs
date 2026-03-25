@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<BookServiceDbContext>(options =>
 {
-    options.UseNpgsql("User ID=books_tracker;Password=hnrsygtgr;Host=postgres_container;Port=5432;Database=BooksDB;");
+    options.UseNpgsql("User ID=book_db;Password=book_db;Host=postgres;Port=5432;Database=book_db;");
 });
 
 builder.Services.AddScoped<IBookRepository, EFCoreBookRepository>();

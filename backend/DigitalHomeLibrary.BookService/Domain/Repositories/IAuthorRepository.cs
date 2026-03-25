@@ -1,10 +1,12 @@
-﻿using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
+using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Domain.Repositories
 {
     public interface IAuthorRepository
     {
+        Task<IReadOnlyList<Author>> GetAllAsync(PaginationInfo? paginationInfo = null);
         Task<Author?> GetByIdAsync(Guid id);
         Task<Author?> FindByFullNameAsync(FullName fullName);
         Task<Guid> AddAsync(Author author);

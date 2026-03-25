@@ -4,17 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models
 {
-    public class BookServiceDbContext : DbContext
+    public class BookServiceDbContext(DbContextOptions<BookServiceDbContext> options) : DbContext(options)
     {
         public DbSet<EFBook> Books { get; set; }
         public DbSet<EFAuthor> Authors { get; set; }
         public DbSet<EFReview> Reviews { get; set; }
         public DbSet<EFTag> Tags { get; set; }
-
-        public BookServiceDbContext(DbContextOptions<BookServiceDbContext> options) : base(options)
-        {
-
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

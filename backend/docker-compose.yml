@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: DigitalHomeLibrary.BookService/Dockerfile
+    depends_on:
+      - postgres
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8070
@@ -24,6 +26,9 @@ services:
     build:
       context: .
       dockerfile: DigitalHomeLibrary.ContentService/Dockerfile
+    depends_on:
+      - postgres
+      - minio
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8060
@@ -41,15 +46,16 @@ services:
       - minio
 
   postgres:
-    container_name: postgres_container
+    container_name: postgres
     image: postgres:14
     environment:
-      POSTGRES_USER: books_tracker
+      POSTGRES_MULTIPLE_DATABASES: "book_db:book_db:book_db,content_db:content_db:content_db"
+      POSTGRES_USER: main_user
       POSTGRES_PASSWORD: hnrsygtgr
-      POSTGRES_DB: BooksDB
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
+       - ./init_db:/docker-entrypoint-initdb.d
     expose:
       - 5432
     networks:
@@ -75,19 +81,6 @@ services:
       retries: 5
     networks:
       - minio
-
-  minio-buckets:
-    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
-    depends_on:
-      - minio
-    restart: on-failure
-    entrypoint: >
-      /bin/sh -c "
-      sleep 20;
-      /usr/bin/mc alias set dockerminio http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb dockerminio/digitalbooks;
-      exit 0;
-      "
 
 
 networks:

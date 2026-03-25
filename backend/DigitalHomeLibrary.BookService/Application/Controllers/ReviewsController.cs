@@ -5,7 +5,7 @@ using DigitalHomeLibrary.BookService.Application.Services;
 using DigitalHomeLibrary.BookService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DigitalHomeLibrary.BookService.Controllers
+namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]

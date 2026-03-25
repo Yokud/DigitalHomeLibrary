@@ -1,17 +1,17 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using DigitalHomeLibrary.DigitalBooksStorage.Services.Abstract;
+using DigitalHomeLibrary.ContentService.Domain.Services;
 
-namespace DigitalHomeLibrary.DigitalBooksStorage.Services
+namespace DigitalHomeLibrary.ContentService.Infrastructure.Services
 {
-    public class S3DigitalBooksService : IDigitalBooksService
+    public class S3BookContentStorageService : IBookContentStorageService
     {
-        readonly IAmazonS3 _s3Client;
+        readonly AmazonS3Client _s3Client;
         readonly string _bucketName = string.Empty;
         readonly int _bigFileMinLen;
 
-        public S3DigitalBooksService(IConfiguration configuration)
+        public S3BookContentStorageService(IConfiguration configuration)
         {
             var config = new AmazonS3Config
             {
@@ -70,27 +70,30 @@ namespace DigitalHomeLibrary.DigitalBooksStorage.Services
                 await _s3Client.PutObjectAsync(request);
             }
             else
-            {
-                var fileTransferUtility = new TransferUtility(_s3Client);
-                var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                {
-                    BucketName = _bucketName,
-                    Key = keyName,
-                    InputStream = memoryStream,
-                    StorageClass = S3StorageClass.StandardInfrequentAccess,
-                    PartSize = 6291456, // 6 MB.
-                    CannedACL = S3CannedACL.PublicRead
-                };
-
-                fileTransferUtilityRequest.UploadProgressEvent += (s, e) =>
-                {
-                    progressCallback?.Invoke(e.PercentDone);
-                };
-
-                await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
-            }
+                await UploadBigFile(keyName, progressCallback, memoryStream);
 
             return keyName;
+        }
+
+        private async Task UploadBigFile(string keyName, Action<int>? progressCallback, MemoryStream memoryStream)
+        {
+            var fileTransferUtility = new TransferUtility(_s3Client);
+            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
+            {
+                BucketName = _bucketName,
+                Key = keyName,
+                InputStream = memoryStream,
+                StorageClass = S3StorageClass.StandardInfrequentAccess,
+                PartSize = 6291456, // 6 MB.
+                CannedACL = S3CannedACL.PublicRead
+            };
+
+            fileTransferUtilityRequest.UploadProgressEvent += (s, e) =>
+            {
+                progressCallback?.Invoke(e.PercentDone);
+            };
+
+            await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
         }
     }
 }

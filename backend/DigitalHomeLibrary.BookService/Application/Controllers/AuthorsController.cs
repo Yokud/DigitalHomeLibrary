@@ -1,12 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using DigitalHomeLibrary.BookService.Application.DTO.Info;
 using DigitalHomeLibrary.BookService.Application.DTO.Requests;
+using DigitalHomeLibrary.BookService.Application.DTO.Responses;
 using DigitalHomeLibrary.BookService.Application.Services;
 using DigitalHomeLibrary.BookService.Domain.Entities;
-using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DigitalHomeLibrary.BookService.Controllers
+namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
@@ -21,6 +21,15 @@ namespace DigitalHomeLibrary.BookService.Controllers
             var res = await _authorService.GetAuthorById(id);
 
             return res.IsSuccess ? Ok(AuthorInfo.FromDomainEntity(res.Value)) : NotFound(res.Error);
+        }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> GetPageOfAuthors([FromQuery] int page, [FromQuery] int size)
+        {
+            var paginationInfo = new PaginationInfo(page, size);
+            var resp = await _authorService.GetAllAuthors(paginationInfo);
+
+            return Ok(new PaginationResponse<AuthorInfo>(paginationInfo.PageNum, paginationInfo.PageSize, resp.Count, resp.Select(AuthorInfo.FromDomainEntity)));
         }
 
         [HttpGet("\"{firstname} {lastname} {middlename}\"")]
@@ -67,6 +76,14 @@ namespace DigitalHomeLibrary.BookService.Controllers
             var res = await _authorService.AddAuthor(author);
 
             return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAuthor(Guid id)
+        {
+            await _authorService.DeleteAuthor(id);
+
+            return NoContent();
         }
     }
 }

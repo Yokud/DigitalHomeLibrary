@@ -1,4 +1,5 @@
-﻿using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
+using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
@@ -42,6 +43,21 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
                 .SingleOrDefaultAsync();
 
             return authorEntity is null ? null : new Author(authorEntity.Id, new(authorEntity.FirstName, authorEntity.LastName, authorEntity.MiddleName), authorEntity.BirthDate, new(authorEntity.CountryName), authorEntity.DeathDate, authorEntity.LifeStory);
+        }
+
+        public async Task<IReadOnlyList<Author>> GetAllAsync(PaginationInfo? paginationInfo = null)
+        {
+            IQueryable<EFAuthor> res = _context.Authors;
+
+            if (paginationInfo is not null)
+                res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);
+
+            var entities = await res
+                .Include(e => e.Books)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return [.. entities.Select(e => new Author(e.Id, new(e.FirstName, e.LastName, e.MiddleName), e.BirthDate, new(e.CountryName), e.DeathDate, e.LifeStory))];
         }
 
         public async Task<Author?> GetByIdAsync(Guid id)

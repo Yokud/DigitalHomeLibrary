@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DigitalHomeLibrary.BookService.Application.DTO.Info;
 using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
@@ -9,6 +10,11 @@ namespace DigitalHomeLibrary.BookService.Application.Services
     {
         readonly IAuthorRepository _authorRepository = authorRepository;
         readonly IBookRepository _bookRepository = bookRepository;
+
+        public async Task<IReadOnlyList<Author>> GetAllAuthors(PaginationInfo? paginationInfo)
+        {
+            return await _authorRepository.GetAllAsync(paginationInfo);
+        }
 
         public async Task<Result<Author>> GetAuthorById(Guid authorId)
         {
@@ -48,9 +54,19 @@ namespace DigitalHomeLibrary.BookService.Application.Services
 
         public async Task<Result<Guid>> AddAuthor(Author author)
         {
+            if (await _authorRepository.FindByFullNameAsync(author.FullName) is not null)
+                return Result.Failure<Guid>($"Author with fullname \"{author.FullName}\" already exists");
+
             var id = await _authorRepository.AddAsync(author);
 
             return Result.Success(id);
+        }
+
+        public async Task DeleteAuthor(Guid id)
+        {
+            await _authorRepository.DeleteAsync(id);
+
+            var authorBooks = (await _bookRepository.GetAllAsync()).Where(book => book.Details.AuthorIds.Contains(id));
         }
     }
 }

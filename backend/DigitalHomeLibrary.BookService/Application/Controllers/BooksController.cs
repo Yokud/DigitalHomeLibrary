@@ -1,11 +1,10 @@
 ﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Application.DTO.Requests;
 using DigitalHomeLibrary.BookService.Application.DTO.Responses;
 using DigitalHomeLibrary.BookService.Application.Services;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DigitalHomeLibrary.BookService.Controllers
+namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]

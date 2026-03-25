@@ -1,6 +1,6 @@
-﻿namespace DigitalHomeLibrary.DigitalBooksStorage.Services.Abstract
+﻿namespace DigitalHomeLibrary.ContentService.Domain.Services
 {
-    public interface IDigitalBooksService
+    public interface IBookContentStorageService
     {
         Task<string> UploadFile(IFormFile file, string keyName, Action<int>? progressCallback = null);
         Task<Stream> DownloadFileAsync(string keyName);
