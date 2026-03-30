@@ -23,7 +23,7 @@ namespace DigitalHomeLibrary.BookService.Application.Services
         public async Task DeleteReview(Guid reviewId)
         {
             await _reviewRepository.DeleteAsync(reviewId);
-        } 
+        }
 
         public async Task<IEnumerable<Review>> GetBookReviews(Guid bookId, PaginationInfo? paginationInfo = null)
         {

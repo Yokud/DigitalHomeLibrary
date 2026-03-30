@@ -8,12 +8,11 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("books/{bookId}/tags")]
     public class BookTagsController(BookTagsService bookTagsService) : Controller
     {
         readonly BookTagsService _bookTagsService = bookTagsService;
 
-        [HttpPost]
+        [HttpPost("books/{bookId}/tags")]
         public async Task<IActionResult> AddTagToBook([FromRoute] Guid bookId, [FromBody] CreateTagRequest request)
         {
             var tag = new BookTag(request.Name, request.Description ?? string.Empty);
@@ -23,7 +22,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }
 
-        [HttpGet]
+        [HttpGet("books/{bookId}/tags")]
         public async Task<IActionResult> GetBookTags([FromRoute] Guid bookId)
         {
             var resp = await _bookTagsService.GetBookTags(bookId);
@@ -31,14 +30,14 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             return Ok(resp.Select(e => new TagsResponse(e.Id, e.Name, e.Description)));
         }
 
-        [HttpDelete("{tagId}")]
+        [HttpDelete("tags/{tagId}")]
         public async Task<IActionResult> DeleteTag(Guid tagId)
         {
             var res = await _bookTagsService.DeleteTag(tagId);
             return res.IsSuccess ? NoContent() : BadRequest(res.Error);
         }
 
-        [HttpPut("{tagId}")]
+        [HttpPut("tags/{tagId}")]
         public async Task<IActionResult> UpdateTag(Guid tagId, [FromBody] UpdateTagRequest request)
         {
             var tag = new BookTag(tagId, request.Name, request.Description ?? string.Empty);

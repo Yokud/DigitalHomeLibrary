@@ -9,12 +9,11 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("books/{bookId}/reviews")]
     public class ReviewsController(ReviewService bookReviewsService) : Controller
     {
         readonly ReviewService _bookReviewsService = bookReviewsService;
 
-        [HttpGet]
+        [HttpGet("books/{bookId}/reviews")]
         public async Task<IActionResult> GetBookReviews([FromRoute] Guid bookId, [FromQuery] int page, [FromQuery] int size)
         {
             var resp = (await _bookReviewsService.GetBookReviews(bookId, new(page, size)));
@@ -22,7 +21,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             return Ok(new PaginationResponse<ReviewInfo>(page, size, resp.Count(), resp.Select(ReviewInfo.FromDomainEntity)));
         }
 
-        [HttpDelete("{reviewId}")]
+        [HttpDelete("reviews/{reviewId}")]
         public async Task<IActionResult> DeleteReview(Guid reviewId)
         {
             await _bookReviewsService.DeleteReview(reviewId);
@@ -30,7 +29,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             return NoContent();
         }
 
-        [HttpPost]
+        [HttpPost("reviews")]
         public async Task<IActionResult> AddReviewToBook([FromBody] CreateReviewRequest request)
         {
             var review = new Review(request.BookId, new(request.Score), request.Note);

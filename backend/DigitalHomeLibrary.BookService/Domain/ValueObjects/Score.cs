@@ -36,7 +36,7 @@
         public AverageScore(IEnumerable<Score> scores)
         {
             var isNullOrEmpty = scores is null || !scores.Any();
-            
+
             ScoresCount = !isNullOrEmpty ? scores!.Count() : 0;
             AverageScoreValue = !isNullOrEmpty ? (float)scores!.Select(s => s.ScoreValue).Sum() / ScoresCount : 0;
         }

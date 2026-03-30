@@ -5,12 +5,12 @@ namespace DigitalHomeLibrary.ContentService.Application.Controllers
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("books-files")]
+    [Route("content-books")]
     public class BookContentController(BookContentService bookContentService) : Controller
     {
         readonly BookContentService _bookContentService = bookContentService;
 
-        [HttpPost("upload")]
+        [HttpPost]
         public async Task<IActionResult> UploadDigitalBook([FromQuery] Guid bookId, [FromForm] IFormFile file, [FromQuery] string path = "")
         {
             var res = await _bookContentService.UploadDigitalBook(bookId, file, path);
@@ -18,8 +18,8 @@ namespace DigitalHomeLibrary.ContentService.Application.Controllers
             return Ok(res);
         }
 
-        [HttpGet("download/{bookId}")]
-        public async Task<IActionResult> DownloadDigitalBook([FromRoute] Guid bookId, [FromQuery] string path = "")
+        [HttpGet("{bookId}")]
+        public async Task<IActionResult> DownloadDigitalBook([FromRoute] Guid bookId)
         {
             var contentData = await _bookContentService.GetBookContentData(bookId);
             var fs = await _bookContentService.DownloadDigitalBook(bookId);
@@ -27,7 +27,7 @@ namespace DigitalHomeLibrary.ContentService.Application.Controllers
         }
 
         [HttpDelete("{bookId}")]
-        public async Task<IActionResult> DeleteDigitalBook([FromRoute] Guid bookId, [FromQuery] string path = "")
+        public async Task<IActionResult> DeleteDigitalBook([FromRoute] Guid bookId)
         {
             await _bookContentService.DeleteDigitalBook(bookId);
             return NoContent();

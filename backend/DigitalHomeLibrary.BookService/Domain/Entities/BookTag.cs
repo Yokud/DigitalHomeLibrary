@@ -12,7 +12,7 @@
 
         public BookTag(string name, string description) : this(Guid.NewGuid(), name, description)
         {
-            
+
         }
 
         public string Name { get; }

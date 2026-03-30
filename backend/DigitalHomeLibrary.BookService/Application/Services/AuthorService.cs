@@ -6,10 +6,9 @@ using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Application.Services
 {
-    public class AuthorService(IAuthorRepository authorRepository, IBookRepository bookRepository)
+    public class AuthorService(IAuthorRepository authorRepository)
     {
         readonly IAuthorRepository _authorRepository = authorRepository;
-        readonly IBookRepository _bookRepository = bookRepository;
 
         public async Task<IReadOnlyList<Author>> GetAllAuthors(PaginationInfo? paginationInfo)
         {
@@ -28,19 +27,6 @@ namespace DigitalHomeLibrary.BookService.Application.Services
             var res = await _authorRepository.FindByFullNameAsync(fullName);
 
             return res is not null ? Result.Success(res) : Result.Failure<Author>($"Author with full name \"{fullName}\" does not exist");
-        }
-
-        public async Task<Result<IReadOnlyList<Author>>> GetBookAuthors(Guid bookId)
-        {
-            var book = await _bookRepository.GetByIdAsync(bookId);
-
-            if (book is null)
-                return Result.Failure<IReadOnlyList<Author>>($"Book with ID = {bookId} does not exist");
-
-            var getAuthorTasks = book.Details.AuthorIds.Select(async id => await _authorRepository.GetByIdAsync(id));
-            var authors = (await Task.WhenAll(getAuthorTasks))?.Where(e => e is not null).Cast<Author>();
-
-            return authors is null ? Result.Failure<IReadOnlyList<Author>>($"Authors for book with ID = {bookId} does not exist") : Result.Success<IReadOnlyList<Author>>([.. authors]);
         }
 
         public async Task<Result> UpdateAuthor(Author author)
@@ -65,8 +51,6 @@ namespace DigitalHomeLibrary.BookService.Application.Services
         public async Task DeleteAuthor(Guid id)
         {
             await _authorRepository.DeleteAsync(id);
-
-            var authorBooks = (await _bookRepository.GetAllAsync()).Where(book => book.Details.AuthorIds.Contains(id));
         }
     }
 }

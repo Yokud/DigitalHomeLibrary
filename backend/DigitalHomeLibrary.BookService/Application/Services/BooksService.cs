@@ -7,9 +7,10 @@ using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Application.Services
 {
-    public class BooksService(IBookRepository booksRepository, BookReviewsService bookReviewsService)
+    public class BooksService(IBookRepository booksRepository, IAuthorRepository authorRepository, BookReviewsService bookReviewsService)
     {
         readonly IBookRepository _booksRepository = booksRepository;
+        readonly IAuthorRepository _authorRepository = authorRepository;
         readonly BookReviewsService _bookReviewsService = bookReviewsService;
 
         public async Task<Guid> AddBook(BookDetails bookInfo)
@@ -31,6 +32,19 @@ namespace DigitalHomeLibrary.BookService.Application.Services
             var book = await _booksRepository.GetByIdAsync(bookId);
 
             return book is null ? Result.Failure<Book>($"Book with ID = {bookId} does not exist") : Result.Success(book);
+        }
+
+        public async Task<Result<IReadOnlyList<Author>>> GetBookAuthors(Guid bookId)
+        {
+            var book = await _booksRepository.GetByIdAsync(bookId);
+
+            if (book is null)
+                return Result.Failure<IReadOnlyList<Author>>($"Book with ID = {bookId} does not exist");
+
+            var getAuthorTasks = book.Details.AuthorIds.Select(async id => await _authorRepository.GetByIdAsync(id));
+            var authors = (await Task.WhenAll(getAuthorTasks))?.Where(e => e is not null).Cast<Author>();
+
+            return authors is null ? Result.Failure<IReadOnlyList<Author>>($"Authors for book with ID = {bookId} does not exist") : Result.Success<IReadOnlyList<Author>>([.. authors]);
         }
 
         public async Task<Result> SetBookStateRead(Guid bookId)

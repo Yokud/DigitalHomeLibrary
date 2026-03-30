@@ -13,7 +13,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
     {
         readonly BooksService _booksService = booksService;
 
-        [HttpGet("list")]
+        [HttpGet]
         public async Task<IActionResult> GetPageOfBooks([FromQuery] int page, [FromQuery] int size)
         {
             var paginationInfo = new PaginationInfo(page, size);
@@ -28,6 +28,15 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             var res = await _booksService.GetBookById(id);
 
             return res.IsSuccess ? Ok(res.Value) : NotFound(res.Error);
+        }
+
+
+        [HttpGet("{id}/authors")]
+        public async Task<IActionResult> GetBookAuthors(Guid id)
+        {
+            var res = await _booksService.GetBookAuthors(id);
+
+            return res.IsSuccess ? Ok(res.Value.Select(AuthorInfo.FromDomainEntity)) : BadRequest(res.Error);
         }
 
         [HttpPost]

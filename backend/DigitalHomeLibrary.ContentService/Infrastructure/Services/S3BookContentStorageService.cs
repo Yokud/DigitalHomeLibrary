@@ -107,5 +107,21 @@ namespace DigitalHomeLibrary.ContentService.Infrastructure.Services
 
             await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
         }
+
+        // TODO: add after create auth service
+        //private string GetUserFileUrl(Guid userId, string fileName)
+        //{
+        //    string keyName = $"{userId}/{fileName}";
+
+        //    var request = new GetPreSignedUrlRequest
+        //    {
+        //        BucketName = _bucketName,
+        //        Key = keyName,
+        //        Expires = DateTime.UtcNow.AddMinutes(15),
+        //        Verb = HttpVerb.GET
+        //    };
+
+        //    return _s3Client.GetPreSignedURL(request);
+        //}
     }
 }

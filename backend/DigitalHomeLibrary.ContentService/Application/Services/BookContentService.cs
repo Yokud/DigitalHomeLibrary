@@ -46,9 +46,5 @@ namespace DigitalHomeLibrary.ContentService.Application.Services
         private static string GetKeyName(string path, string filename) => string.IsNullOrEmpty(path)
                 ? $"{Ulid.NewUlid()}{Path.GetExtension(filename)}"
                 : $"{path.TrimEnd('/')}/{Ulid.NewUlid()}{Path.GetExtension(filename)}";
-
-        private static string GetFullPath(string path, string keyName) => string.IsNullOrEmpty(path)
-                ? $"{keyName}"
-                : $"{path.TrimEnd('/')}/{keyName}";
     }
 }

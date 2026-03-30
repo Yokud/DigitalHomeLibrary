@@ -23,7 +23,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             return res.IsSuccess ? Ok(AuthorInfo.FromDomainEntity(res.Value)) : NotFound(res.Error);
         }
 
-        [HttpGet("list")]
+        [HttpGet]
         public async Task<IActionResult> GetPageOfAuthors([FromQuery] int page, [FromQuery] int size)
         {
             var paginationInfo = new PaginationInfo(page, size);
@@ -38,14 +38,6 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
             var res = await _authorService.FindAuthorByFullName(new(firstname, lastname, middlename));
 
             return res.IsSuccess ? Ok(AuthorInfo.FromDomainEntity(res.Value)) : BadRequest(res.Error);
-        }
-
-        [HttpGet("books/{bookId}")]
-        public async Task<IActionResult> GetBookAuthors(Guid bookId)
-        {
-            var res = await _authorService.GetBookAuthors(bookId);
-
-            return res.IsSuccess ? Ok(res.Value.Select(AuthorInfo.FromDomainEntity)) : BadRequest(res.Error);
         }
 
         [HttpPatch]

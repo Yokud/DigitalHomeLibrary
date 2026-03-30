@@ -16,7 +16,7 @@ namespace DigitalHomeLibrary.BookService.Domain.Entities
 
         public Review(Guid reviewedBookId, Score score, string note) : this(Guid.NewGuid(), reviewedBookId, score, note)
         {
-            
+
         }
 
         public Guid ReviewedBookId { get; private set; }
