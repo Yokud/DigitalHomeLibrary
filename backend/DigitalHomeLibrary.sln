@@ -14,6 +14,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalHomeLibrary.ContentService", "DigitalHomeLibrary.ContentService\DigitalHomeLibrary.ContentService.csproj", "{C033523B-B91A-4421-873E-ED065B6473A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalHomeLibrary.AuthService", "DigitalHomeLibrary.AuthService\DigitalHomeLibrary.AuthService.csproj", "{F3066ED3-5FF6-4ACA-819D-35CB276D588A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{C033523B-B91A-4421-873E-ED065B6473A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C033523B-B91A-4421-873E-ED065B6473A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C033523B-B91A-4421-873E-ED065B6473A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3066ED3-5FF6-4ACA-819D-35CB276D588A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3066ED3-5FF6-4ACA-819D-35CB276D588A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3066ED3-5FF6-4ACA-819D-35CB276D588A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3066ED3-5FF6-4ACA-819D-35CB276D588A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
