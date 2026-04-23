@@ -24,10 +24,13 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
                 ISBN = book.Details.ISBN.Value,
                 Genre = book.Details.Genre,
                 Language = book.Details.Language,
-                AdditionDateTime = book.Status!.AdditionDateTime,
-                ReadingState = book.Status.ReadingState,
-                ReadingStartDate = book.Status.ReadingStartDate,
-                ReadingEndDate = book.Status.ReadingEndDate,
+                Status = new()
+                {
+                    AdditionDateTime = book.Status.AdditionDateTime,
+                    ReadingState = book.Status.ReadingState,
+                    ReadingStartDate = book.Status.ReadingStartDate,
+                    ReadingEndDate = book.Status.ReadingEndDate,
+                }
             };
 
             await _context.Books.AddAsync(daEntity);
@@ -65,8 +68,8 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
             var bookEntities = await res
                 .Include(e => e.Authors)
-                //.Include(e => e.Reviews)
-                //.Include(e => e.Tags)
+                .Include(e => e.Reviews)
+                .Include(e => e.Tags)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -93,16 +96,9 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
             SetProperty(e => e.Publisher, book.Details.Publisher).
             SetProperty(e => e.ISBN, book.Details.ISBN.Value).
             SetProperty(e => e.Genre, book.Details.Genre).
-            SetProperty(e => e.Language, book.Details.Language)
+            SetProperty(e => e.Language, book.Details.Language).
+            SetProperty(e => e.Status, EFStatus.FromDomain(book.Status))
             );
-
-            if (book.Status is not null)
-                await updatingBookQuery.ExecuteUpdateAsync(s => s.
-                SetProperty(e => e.AdditionDateTime, book.Status.AdditionDateTime).
-                SetProperty(e => e.ReadingState, book.Status.ReadingState).
-                SetProperty(e => e.ReadingStartDate, book.Status.ReadingStartDate).
-                SetProperty(e => e.ReadingEndDate, book.Status.ReadingEndDate)
-                );
 
             await _context.SaveChangesAsync();
         }

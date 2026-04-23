@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class ReviewsController(ReviewService bookReviewsService) : Controller
     {
         readonly ReviewService _bookReviewsService = bookReviewsService;

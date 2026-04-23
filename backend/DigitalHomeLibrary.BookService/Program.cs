@@ -4,13 +4,11 @@ using DigitalHomeLibrary.BookService.Domain.Services;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using DigitalHomeLibrary.BookService.Infractructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -39,10 +37,15 @@ using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<BookServiceDbContext>();
 context.Database.EnsureCreated();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+    {
+        options.Title = "Book Service";
+        options.Theme = ScalarTheme.BluePlanet;
+        options.DefaultHttpClient = new(ScalarTarget.Http, ScalarClient.Http11);
+    });
 }
 
 app.UseAuthorization();

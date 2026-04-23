@@ -19,6 +19,8 @@ namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models.Config
                 .WithOne(r => r.ReviewedBook)
                 .HasForeignKey(r => r.BookId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.OwnsOne(b => b.Status);
         }
     }
 }

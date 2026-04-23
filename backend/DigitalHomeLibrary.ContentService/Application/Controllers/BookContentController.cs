@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DigitalHomeLibrary.ContentService.Application.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("content-books")]
     public class BookContentController(BookContentService bookContentService) : Controller
     {

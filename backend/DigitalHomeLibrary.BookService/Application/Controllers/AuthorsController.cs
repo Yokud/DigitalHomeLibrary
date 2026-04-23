@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("authors")]
     public class AuthorsController(AuthorService authorService) : Controller
     {
