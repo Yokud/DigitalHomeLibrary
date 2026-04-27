@@ -85,6 +85,31 @@ services:
     networks:
       - minio
 
+  minio-buckets:
+    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
+    depends_on:
+      - minio
+    restart: on-failure
+    entrypoint: >
+      /bin/sh -c "
+      sleep 20;
+      /usr/bin/mc alias set dockerminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb dockerminio/digitalbooks;
+      exit 0;"
+    networks:
+      - minio
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:26.5.2
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    restart: always
+
 
 networks:
   postgres:
