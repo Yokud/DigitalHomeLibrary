@@ -16,7 +16,7 @@ builder.Configuration.AddJsonFile("appsettings.json");
 
 builder.Services.AddDbContext<ContentServiceDbContext>(options =>
 {
-    options.UseNpgsql("User ID=content_db;Password=content_db;Host=postgres;Port=5432;Database=content_db;");
+    options.UseNpgsql("User ID=content_user;Password=content_password;Host=postgres;Port=5432;Database=content_db;");
 });
 
 builder.Services.AddScoped<IBookContentDataRepository, EFCoreBookContentDataRepository>();

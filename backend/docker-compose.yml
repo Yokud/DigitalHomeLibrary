@@ -21,6 +21,7 @@ services:
       - 8071:8071 
     networks:
       - postgres
+      - keycloak
 
   digitalhomelibrary.content:
     container_name: content_service
@@ -46,12 +47,13 @@ services:
     networks:
       - postgres
       - minio
+      - keycloak
 
   postgres:
     container_name: postgres
     image: postgres:14
     environment:
-      POSTGRES_MULTIPLE_DATABASES: "book_db:book_db:book_db,content_db:content_db:content_db"
+      POSTGRES_MULTIPLE_DATABASES: "book_db:book_user:book_password,content_db:content_user:content_password,keycloak_db:keycloak_user:keycloak_password"
       POSTGRES_USER: main_user
       POSTGRES_PASSWORD: hnrsygtgr
       PGDATA: /data/postgres
@@ -89,7 +91,7 @@ services:
     image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
     depends_on:
       - minio
-    restart: on-failure
+    restart: no
     entrypoint: >
       /bin/sh -c "
       sleep 20;
@@ -104,18 +106,34 @@ services:
     image: quay.io/keycloak/keycloak:26.5.2
     command: start-dev
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_USERNAME=keycloak_user
+      - KC_DB_PASSWORD=keycloak_password
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak_db
+      #- KC_HOSTNAME=localhost
+      #- KC_HOSTNAME_PORT=8080
+      #- KC_HOSTNAME_STRICT=false
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
     ports:
       - "8080:8080"
+    volumes:
+      - keycloak:/opt/keycloak/data
     restart: always
+    depends_on:  
+      - postgres
+    networks:
+      - postgres
+      - keycloak
 
 
 networks:
   postgres:
   minio:
+  keycloak:
     driver: bridge
 
 volumes:
-    postgres:
-    minio:
+  postgres:
+  minio:
+  keycloak:

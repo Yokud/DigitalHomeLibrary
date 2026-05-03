@@ -2,12 +2,14 @@
 using DigitalHomeLibrary.BookService.Application.DTO.Responses;
 using DigitalHomeLibrary.BookService.Application.Services;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalHomeLibrary.BookService.Application.Controllers
 {
     [ApiController]
     [Route("books")]
+    [Authorize(Policy = "Moderators")]
     public class BooksController(BooksService booksService) : Controller
     {
         readonly BooksService _booksService = booksService;
