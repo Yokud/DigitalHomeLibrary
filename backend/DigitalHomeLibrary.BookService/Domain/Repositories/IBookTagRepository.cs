@@ -1,5 +1,5 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
+using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Domain.Repositories
 {
@@ -7,7 +7,7 @@ namespace DigitalHomeLibrary.BookService.Domain.Repositories
     {
         Task<BookTag?> GetByIdAsync(Guid id);
         Task<BookTag?> FindByNameAsync(string name);
-        Task<IEnumerable<BookTag>> GetAllAsync(PaginationInfo? paginationInfo = null);
+        Task<IEnumerable<BookTag>> GetAllAsync(PaginationParams? paginationInfo = null);
         Task<Guid> AddAsync(BookTag tag);
         Task UpdateAsync(BookTag tag);
         Task DeleteAsync(Guid id);

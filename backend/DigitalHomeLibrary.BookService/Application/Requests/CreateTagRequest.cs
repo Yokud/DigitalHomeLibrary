@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.BookService.Application.DTO.Requests
+﻿namespace DigitalHomeLibrary.BookService.Application.Requests
 {
     public record CreateTagRequest(string Name, string? Description);
 }

@@ -1,7 +1,5 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Requests;
-using DigitalHomeLibrary.BookService.Application.DTO.Responses;
+﻿using DigitalHomeLibrary.BookService.Application.Requests;
 using DigitalHomeLibrary.BookService.Application.Services;
-using DigitalHomeLibrary.BookService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalHomeLibrary.BookService.Application.Controllers
@@ -14,9 +12,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         [HttpPost("books/{bookId}/tags")]
         public async Task<IActionResult> AddTagToBook([FromRoute] Guid bookId, [FromBody] CreateTagRequest request)
         {
-            var tag = new BookTag(request.Name, request.Description ?? string.Empty);
-
-            var res = await _bookTagsService.AddTagToBook(bookId, tag);
+            var res = await _bookTagsService.AddTagToBook(bookId, request.Name, request.Description);
 
             return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }
@@ -26,7 +22,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         {
             var resp = await _bookTagsService.GetBookTags(bookId);
 
-            return Ok(resp.Select(e => new TagsResponse(e.Id, e.Name, e.Description)));
+            return Ok(resp);
         }
 
         [HttpDelete("tags/{tagId}")]
@@ -39,9 +35,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         [HttpPut("tags/{tagId}")]
         public async Task<IActionResult> UpdateTag(Guid tagId, [FromBody] UpdateTagRequest request)
         {
-            var tag = new BookTag(tagId, request.Name, request.Description ?? string.Empty);
-
-            await _bookTagsService.UpdateTag(tag);
+            await _bookTagsService.UpdateTag(tagId, request.Name, request.Description);
             return Ok();
         }
     }

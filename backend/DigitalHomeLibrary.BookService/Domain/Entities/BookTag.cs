@@ -2,15 +2,15 @@
 {
     public class BookTag : DomainEntity
     {
-        public BookTag(Guid id, string name, string description) : base(id)
+        public BookTag(Guid id, string name, string? description = null) : base(id)
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
             Name = name;
-            Description = description;
+            Description = description ?? string.Empty;
         }
 
-        public BookTag(string name, string description) : this(Guid.NewGuid(), name, description)
+        public BookTag(string name, string? description = null) : this(Guid.NewGuid(), name, description)
         {
 
         }

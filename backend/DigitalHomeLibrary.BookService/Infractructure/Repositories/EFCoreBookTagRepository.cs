@@ -1,7 +1,7 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
-using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.Domain.ValueObjects;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.DBO;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
         public async Task<Guid> AddAsync(BookTag tag)
         {
-            var daEntity = new EFTag()
+            var daEntity = new TagDbo()
             {
                 Id = tag.Id,
                 Name = tag.Name,
@@ -38,9 +38,9 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
             return entity is not null ? new BookTag(entity.Id, entity.Name, entity.Description) : null;
         }
 
-        public async Task<IEnumerable<BookTag>> GetAllAsync(PaginationInfo? paginationInfo = null)
+        public async Task<IEnumerable<BookTag>> GetAllAsync(PaginationParams? paginationInfo = null)
         {
-            IQueryable<EFTag> res = _context.Tags;
+            IQueryable<TagDbo> res = _context.Tags;
 
             if (paginationInfo is not null)
                 res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);

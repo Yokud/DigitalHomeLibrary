@@ -1,7 +1,7 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
-using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.Domain.ValueObjects;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.DBO;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
         public async Task<Guid> AddAsync(Book book)
         {
-            var daEntity = new EFBook()
+            var daEntity = new BookDbo()
             {
                 Id = book.Id,
                 Title = book.Details.Title,
@@ -59,9 +59,9 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
             return bookEntity is not null ? new(bookEntity.Id, new(bookEntity.Title, bookEntity.Description, bookEntity.Authors.Select(a => a.Id), bookEntity.ReleaseYear, bookEntity.Publisher, new(bookEntity.ISBN), bookEntity.Genre, bookEntity.Language)) : null;
         }
 
-        public async Task<IReadOnlyList<Book>> GetAllAsync(PaginationInfo? paginationInfo = null)
+        public async Task<IReadOnlyList<Book>> GetAllAsync(PaginationParams? paginationInfo = null)
         {
-            IQueryable<EFBook> res = _context.Books;
+            IQueryable<BookDbo> res = _context.Books;
 
             if (paginationInfo is not null)
                 res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);
@@ -97,7 +97,7 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
             SetProperty(e => e.ISBN, book.Details.ISBN.Value).
             SetProperty(e => e.Genre, book.Details.Genre).
             SetProperty(e => e.Language, book.Details.Language).
-            SetProperty(e => e.Status, EFStatus.FromDomain(book.Status))
+            SetProperty(e => e.Status, StatusDbo.FromDomain(book.Status))
             );
 
             await _context.SaveChangesAsync();

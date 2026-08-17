@@ -1,20 +1,20 @@
 ﻿using CSharpFunctionalExtensions;
-using DigitalHomeLibrary.BookService.Application.DTO.Info;
+using DigitalHomeLibrary.BookService.Application.DTO;
+using DigitalHomeLibrary.BookService.Application.Responses;
 using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
-using DigitalHomeLibrary.BookService.Domain.Services;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Application.Services
 {
-    public class BooksService(IBookRepository booksRepository, IAuthorRepository authorRepository, BookReviewsService bookReviewsService)
+    public class BooksService(IBookRepository booksRepository, IAuthorRepository authorRepository)
     {
         readonly IBookRepository _booksRepository = booksRepository;
         readonly IAuthorRepository _authorRepository = authorRepository;
-        readonly BookReviewsService _bookReviewsService = bookReviewsService;
 
-        public async Task<Guid> AddBook(BookDetails bookInfo)
+        public async Task<Guid> AddBook(string title, string description, IEnumerable<Guid> authorIds, int releaseYear, string publisher, string isbn, string genre, string language)
         {
+            var bookInfo = new BookDetails(title, description, authorIds, releaseYear, publisher, new(isbn), genre, language);
             var book = new Book(bookInfo);
 
             var bookId = await _booksRepository.AddAsync(book);
@@ -27,29 +27,29 @@ namespace DigitalHomeLibrary.BookService.Application.Services
             await _booksRepository.DeleteAsync(bookId);
         }
 
-        public async Task<Result<Book>> GetBookById(Guid bookId)
+        public async Task<Result<BookDto>> GetBookById(Guid bookId)
         {
             var book = await _booksRepository.GetByIdAsync(bookId);
 
-            return book is null ? Result.Failure<Book>($"Book with ID = {bookId} does not exist") : Result.Success(book);
+            return book is null ? Result.Failure<BookDto>($"Book with ID = {bookId} does not exist") : Result.Success(BookDto.FromDomainEntity(book));
         }
 
-        public async Task<Result<IReadOnlyList<Author>>> GetBookAuthors(Guid bookId)
+        public async Task<Result<IReadOnlyList<AuthorDto>>> GetBookAuthors(Guid bookId)
         {
             var book = await _booksRepository.GetByIdAsync(bookId);
 
             if (book is null)
-                return Result.Failure<IReadOnlyList<Author>>($"Book with ID = {bookId} does not exist");
+                return Result.Failure<IReadOnlyList<AuthorDto>>($"Book with ID = {bookId} does not exist");
 
             var getAuthorTasks = book.Details.AuthorIds.Select(async id => await _authorRepository.GetByIdAsync(id));
             var authors = (await Task.WhenAll(getAuthorTasks))?.Where(e => e is not null).Cast<Author>();
 
-            return authors is null ? Result.Failure<IReadOnlyList<Author>>($"Authors for book with ID = {bookId} does not exist") : Result.Success<IReadOnlyList<Author>>([.. authors]);
+            return authors is null ? Result.Failure<IReadOnlyList<AuthorDto>>($"Authors for book with ID = {bookId} does not exist") : Result.Success<IReadOnlyList<AuthorDto>>([.. authors.Select(AuthorDto.FromDomainEntity)]);
         }
 
         public async Task<Result> SetBookStateRead(Guid bookId)
         {
-            var book = (await _booksRepository.GetByIdAsync(bookId));
+            var book = await _booksRepository.GetByIdAsync(bookId);
 
             if (book is null)
                 return Result.Failure("Not found book");
@@ -62,7 +62,7 @@ namespace DigitalHomeLibrary.BookService.Application.Services
 
         public async Task<Result> SetBookStateReading(Guid bookId)
         {
-            var book = (await _booksRepository.GetByIdAsync(bookId));
+            var book = await _booksRepository.GetByIdAsync(bookId);
 
             if (book is null)
                 return Result.Failure("Not found book");
@@ -86,16 +86,19 @@ namespace DigitalHomeLibrary.BookService.Application.Services
             return Result.Success();
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks(PaginationInfo? paginationInfo = null)
+        public async Task<PaginationResponse<BookDto>> GetAllBooks(int page, int size)
         {
-            return await _booksRepository.GetAllAsync(paginationInfo);
+            var paginationInfo = new PaginationParams(page, size);
+            var res = await _booksRepository.GetAllAsync(paginationInfo);
+
+            return new PaginationResponse<BookDto>(paginationInfo.PageNum, paginationInfo.PageSize, res.Count(), res.Select(BookDto.FromDomainEntity));
         }
 
-        public async Task<IEnumerable<Book>> GetAuthorBooks(Guid authorId)
+        public async Task<IReadOnlyList<BookDto>> GetAuthorBooks(Guid authorId)
         {
-            return (await _booksRepository.GetAllAsync()).Where(book => book.Details.AuthorIds.Contains(authorId));
-        }
+            var authorBooks = (await _booksRepository.GetAllAsync()).Where(book => book.Details.AuthorIds.Contains(authorId));
 
-        public async Task<Result<AverageScore>> GetBookAverageScore(Guid bookId) => await _bookReviewsService.GetBookAverageScore(bookId);
+            return [.. authorBooks.Select(BookDto.FromDomainEntity)];
+        }
     }
 }

@@ -68,9 +68,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
-        options.Title = "Book Service";
-        options.Theme = ScalarTheme.BluePlanet;
-        options.DefaultHttpClient = new(ScalarTarget.Http, ScalarClient.Http11);
+        options.WithTitle("Book Service")
+               .WithTheme(ScalarTheme.BluePlanet)
+               .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.Http);
     });
 }
 

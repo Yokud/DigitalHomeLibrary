@@ -1,10 +1,10 @@
-﻿namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities
+﻿namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.DBO
 {
-    public class EFTag
+    public class TagDbo
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public ICollection<EFBook> TaggedBooks { get; set; } = [];
+        public ICollection<BookDbo> TaggedBooks { get; set; } = [];
     }
 }

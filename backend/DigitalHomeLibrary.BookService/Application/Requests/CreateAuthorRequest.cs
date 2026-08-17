@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.BookService.Application.DTO.Requests
+﻿namespace DigitalHomeLibrary.BookService.Application.Requests
 {
     public record CreateAuthorRequest(string FirstName, string LastName, DateOnly BirthDate, string CountryName, string? MiddleName, DateOnly? DeathDate, string? LifeStory);
 }

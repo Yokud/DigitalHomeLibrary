@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DigitalHomeLibrary.BookService.Application.DTO;
 using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
 
@@ -9,15 +10,19 @@ namespace DigitalHomeLibrary.BookService.Application.Services
         readonly IBookRepository _booksRepository = booksRepository;
         readonly IBookTagRepository _tagsRepository = tagsRepository;
 
-        public async Task<Result<Guid>> AddTagToBook(Guid bookId, BookTag tag)
+        public async Task<Result<Guid>> AddTagToBook(Guid bookId, string tagName, string? tagDescription)
         {
             var book = await _booksRepository.GetByIdAsync(bookId);
 
             if (book is null)
                 return Result.Failure<Guid>("Not found book");
 
-            if (await _tagsRepository.GetByIdAsync(tag.Id) is null)
+            var tag = await _tagsRepository.FindByNameAsync(tagName);
+            if (tag is null)
+            {
+                tag = new BookTag(tagName, tagDescription);
                 await _tagsRepository.AddAsync(tag);
+            }
 
             book.AddTag(tag);
             await _booksRepository.UpdateAsync(book);
@@ -41,20 +46,25 @@ namespace DigitalHomeLibrary.BookService.Application.Services
             return Result.Success();
         }
 
-        public async Task<IEnumerable<BookTag>> GetBookTags(Guid bookId)
+        public async Task<IReadOnlyList<BookTagDto>> GetBookTags(Guid bookId)
         {
             var tagIds = (await _booksRepository.GetByIdAsync(bookId))?.BookTagIds ?? [];
 
             var bookTagTasks = tagIds.Select(async tagId => await _tagsRepository.GetByIdAsync(tagId));
             var bookTags = await Task.WhenAll(bookTagTasks);
 
-            return bookTags.Where(e => e is not null).Cast<BookTag>();
+            return [.. bookTags.Where(e => e is not null).Select(e => BookTagDto.FromDomainEntity(e!))];
         }
 
-        public async Task UpdateTag(BookTag tagInfo)
+        public async Task<Result> UpdateTag(Guid tagId, string tagName, string? description = null)
         {
-            var tag = new BookTag(tagInfo.Id, tagInfo.Name, tagInfo.Description);
+            if (await _tagsRepository.GetByIdAsync(tagId) is null)
+                return Result.Failure("Not found tag");
+
+            var tag = new BookTag(tagId, tagName, description);
             await _tagsRepository.UpdateAsync(tag);
+
+            return Result.Success();
         }
     }
 }

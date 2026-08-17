@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
-using DigitalHomeLibrary.BookService.Application.DTO.Info;
+using DigitalHomeLibrary.BookService.Application.DTO;
+using DigitalHomeLibrary.BookService.Application.Responses;
 using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
+using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 
 namespace DigitalHomeLibrary.BookService.Application.Services
 {
@@ -10,11 +12,12 @@ namespace DigitalHomeLibrary.BookService.Application.Services
         private readonly IBookRepository _bookRepository = bookRepository;
         private readonly IReviewRepository _reviewRepository = reviewRepository;
 
-        public async Task<Result<Guid>> AddReviewToBook(Review review)
+        public async Task<Result<Guid>> AddReviewToBook(Guid bookId, byte score, string note)
         {
-            if (!await _bookRepository.Exists(review.ReviewedBookId))
-                return Result.Failure<Guid>($"Book with ID = {review.ReviewedBookId} does not exist");
+            if (!await _bookRepository.Exists(bookId))
+                return Result.Failure<Guid>($"Book with ID = {bookId} does not exist");
 
+            var review = new Review(bookId, new(score), note);
             await _reviewRepository.AddAsync(review);
 
             return Result.Success(review.Id);
@@ -25,14 +28,14 @@ namespace DigitalHomeLibrary.BookService.Application.Services
             await _reviewRepository.DeleteAsync(reviewId);
         }
 
-        public async Task<IEnumerable<Review>> GetBookReviews(Guid bookId, PaginationInfo? paginationInfo = null)
+        public async Task<PaginationResponse<ReviewDto>> GetBookReviews(Guid bookId, int page, int size)
         {
             var reviews = (await _reviewRepository.GetAllAsync()).Where(e => e.ReviewedBookId == bookId);
 
-            if (paginationInfo is not null)
-                reviews = reviews.Skip((paginationInfo.PageNum - 1) * paginationInfo.PageSize).Take(paginationInfo.PageSize);
+            var paginationInfo = new PaginationParams(page, size);
+            reviews = reviews.Skip((paginationInfo.PageNum - 1) * paginationInfo.PageSize).Take(paginationInfo.PageSize);
 
-            return reviews;
+            return new PaginationResponse<ReviewDto>(page, size, reviews.Count(), reviews.Select(ReviewDto.FromDomainEntity));
         }
     }
 }

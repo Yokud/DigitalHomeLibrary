@@ -34,9 +34,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
-        options.Title = "Content Service";
-        options.Theme = ScalarTheme.Purple;
-        options.DefaultHttpClient = new(ScalarTarget.Http, ScalarClient.Http11);
+        options.WithTitle("Content Service")
+               .WithTheme(ScalarTheme.Purple)
+               .WithDefaultHttpClient(ScalarTarget.Http, ScalarClient.Http11);
     });
 }
 

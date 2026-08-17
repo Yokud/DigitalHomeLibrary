@@ -1,7 +1,5 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Application.DTO.Responses;
+﻿using DigitalHomeLibrary.BookService.Application.Requests;
 using DigitalHomeLibrary.BookService.Application.Services;
-using DigitalHomeLibrary.BookService.Domain.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +15,9 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPageOfBooks([FromQuery] int page, [FromQuery] int size)
         {
-            var paginationInfo = new PaginationInfo(page, size);
-            var resp = await _booksService.GetAllBooks(paginationInfo);
+            var resp = await _booksService.GetAllBooks(page, size);
 
-            return Ok(new PaginationResponse<BookInfo>(paginationInfo.PageNum, paginationInfo.PageSize, resp.Count(), resp.Select(BookInfo.FromDomainEntity)));
+            return Ok(resp);
         }
 
         [HttpGet("{id}")]
@@ -37,15 +34,13 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         {
             var res = await _booksService.GetBookAuthors(id);
 
-            return res.IsSuccess ? Ok(res.Value.Select(AuthorInfo.FromDomainEntity)) : BadRequest(res.Error);
+            return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] CreateBookRequest request)
         {
-            var details = new BookDetails(request.Title, request.Description, request.AuthorIds, request.ReleaseYear, request.Publisher, new(request.ISBN), request.Genre, request.Language);
-
-            var id = await _booksService.AddBook(details);
+            var id = await _booksService.AddBook(request.Title, request.Description, request.AuthorIds, request.ReleaseYear, request.Publisher, new(request.ISBN), request.Genre, request.Language);
             return Ok(id);
         }
 

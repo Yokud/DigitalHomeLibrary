@@ -1,8 +1,5 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Application.DTO.Requests;
-using DigitalHomeLibrary.BookService.Application.DTO.Responses;
+﻿using DigitalHomeLibrary.BookService.Application.Requests;
 using DigitalHomeLibrary.BookService.Application.Services;
-using DigitalHomeLibrary.BookService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalHomeLibrary.BookService.Application.Controllers
@@ -15,9 +12,9 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         [HttpGet("books/{bookId}/reviews")]
         public async Task<IActionResult> GetBookReviews([FromRoute] Guid bookId, [FromQuery] int page, [FromQuery] int size)
         {
-            var resp = (await _bookReviewsService.GetBookReviews(bookId, new(page, size)));
+            var resp = await _bookReviewsService.GetBookReviews(bookId, page, size);
 
-            return Ok(new PaginationResponse<ReviewInfo>(page, size, resp.Count(), resp.Select(ReviewInfo.FromDomainEntity)));
+            return Ok(resp);
         }
 
         [HttpDelete("reviews/{reviewId}")]
@@ -31,9 +28,7 @@ namespace DigitalHomeLibrary.BookService.Application.Controllers
         [HttpPost("reviews")]
         public async Task<IActionResult> AddReviewToBook([FromBody] CreateReviewRequest request)
         {
-            var review = new Review(request.BookId, new(request.Score), request.Note);
-
-            var res = await _bookReviewsService.AddReviewToBook(review);
+            var res = await _bookReviewsService.AddReviewToBook(request.BookId, request.Score, request.Note);
 
             return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }

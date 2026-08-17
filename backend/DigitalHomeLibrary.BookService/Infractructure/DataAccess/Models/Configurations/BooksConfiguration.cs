@@ -1,12 +1,12 @@
-﻿using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+﻿using DigitalHomeLibrary.BookService.Infractructure.DataAccess.DBO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models.Configurations
 {
-    public class BooksConfiguration : IEntityTypeConfiguration<EFBook>
+    public class BooksConfiguration : IEntityTypeConfiguration<BookDbo>
     {
-        public void Configure(EntityTypeBuilder<EFBook> builder)
+        public void Configure(EntityTypeBuilder<BookDbo> builder)
         {
             builder.HasKey(b => b.Id);
 

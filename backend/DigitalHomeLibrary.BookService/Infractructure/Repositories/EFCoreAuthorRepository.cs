@@ -1,8 +1,7 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
 using DigitalHomeLibrary.BookService.Domain.ValueObjects;
-using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.DBO;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,7 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
         public async Task<Guid> AddAsync(Author author)
         {
-            var daEntity = new EFAuthor()
+            var daEntity = new AuthorDbo()
             {
                 Id = author.Id,
                 FirstName = author.FullName.FirstName,
@@ -45,9 +44,9 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
             return authorEntity is null ? null : new Author(authorEntity.Id, new(authorEntity.FirstName, authorEntity.LastName, authorEntity.MiddleName), authorEntity.BirthDate, new(authorEntity.CountryName), authorEntity.DeathDate, authorEntity.LifeStory);
         }
 
-        public async Task<IReadOnlyList<Author>> GetAllAsync(PaginationInfo? paginationInfo = null)
+        public async Task<IReadOnlyList<Author>> GetAllAsync(PaginationParams? paginationInfo = null)
         {
-            IQueryable<EFAuthor> res = _context.Authors;
+            IQueryable<AuthorDbo> res = _context.Authors;
 
             if (paginationInfo is not null)
                 res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);

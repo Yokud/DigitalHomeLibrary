@@ -1,4 +1,4 @@
-﻿namespace DigitalHomeLibrary.BookService.Application.DTO.Requests
+﻿namespace DigitalHomeLibrary.BookService.Application.Requests
 {
     public record CreateReviewRequest(Guid BookId, byte Score, string Note)
     {

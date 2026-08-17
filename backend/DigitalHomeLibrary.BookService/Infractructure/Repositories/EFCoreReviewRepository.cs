@@ -1,7 +1,7 @@
-﻿using DigitalHomeLibrary.BookService.Application.DTO.Info;
-using DigitalHomeLibrary.BookService.Domain.Entities;
+﻿using DigitalHomeLibrary.BookService.Domain.Entities;
 using DigitalHomeLibrary.BookService.Domain.Repositories;
-using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Entities;
+using DigitalHomeLibrary.BookService.Domain.ValueObjects;
+using DigitalHomeLibrary.BookService.Infractructure.DataAccess.DBO;
 using DigitalHomeLibrary.BookService.Infractructure.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
 
         public async Task<Guid> AddAsync(Review review)
         {
-            var entity = new EFReview()
+            var entity = new ReviewDbo()
             {
                 Id = review.Id,
                 BookId = review.ReviewedBookId,
@@ -32,9 +32,9 @@ namespace DigitalHomeLibrary.BookService.Infractructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Review>> GetAllAsync(PaginationInfo? paginationInfo = null)
+        public async Task<IEnumerable<Review>> GetAllAsync(PaginationParams? paginationInfo = null)
         {
-            IQueryable<EFReview> res = _context.Reviews;
+            IQueryable<ReviewDbo> res = _context.Reviews;
 
             if (paginationInfo is not null)
                 res = res.Skip(paginationInfo.PageNum * paginationInfo.PageSize).Take(paginationInfo.PageSize);
